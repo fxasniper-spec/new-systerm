@@ -200,11 +200,11 @@ input[type=email],input[type=password]{background:var(--panel2);border:1px solid
 </main>
 
 <dialog id="ldlg"><form id="lf">
- <h2>Log in</h2>
+ <h2>Log in / Create account</h2>
  <label>Email<input type="email" id="le" autocomplete="username" required></label>
  <label>Password<input type="password" id="lp" autocomplete="current-password" required></label>
  <p id="lerr" role="alert"></p>
- <div class="acts"><button class="btn main" type="submit" id="lgo">Log in</button></div>
+ <div class="acts"><button class="btn main" type="submit" id="lgo">Log in</button><button class="btn" type="button" id="lsign">Create account</button></div>
 </form></dialog>
 
 <dialog id="adlg"><form id="f">
@@ -468,6 +468,16 @@ else{
       if(r.error){$('lerr').textContent='Email or password is wrong.';return}
       uid=r.data.user.id;$('lp').value='';$('ldlg').close();$('lout').hidden=false;setSync('Loading…');pull()
     },function(){$('lgo').disabled=false;$('lerr').textContent='No internet connection.'})};
+  $('lsign').onclick=function(){
+    var em=$('le').value.trim(),pw=$('lp').value;
+    if(!em||pw.length<6){$('lerr').textContent='Enter your email and a password of at least 6 characters.';return}
+    $('lerr').textContent='';$('lsign').disabled=true;
+    sb.auth.signUp({email:em,password:pw}).then(function(r){
+      $('lsign').disabled=false;
+      if(r.error){$('lerr').textContent=r.error.message;return}
+      if(r.data&&r.data.session){uid=r.data.user.id;$('lp').value='';$('ldlg').close();$('lout').hidden=false;setSync('Loading…');pull()}
+      else{$('lerr').textContent='Account created. Check your email, click the confirm link, then come back and press Log in.'}
+    },function(){$('lsign').disabled=false;$('lerr').textContent='No internet connection.'})};
   $('lout').onclick=function(){sb.auth.signOut().then(function(){
     try{localStorage.removeItem(KEY);localStorage.removeItem(LKEY)}catch(e){}location.reload()})};
   sb.auth.getSession().then(function(r){
