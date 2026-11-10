@@ -835,9 +835,25 @@ $('tm').onclick=function(){cal=new Date(now.getFullYear(),now.getMonth(),1);draw
 function openAdd(ds){$('f').reset();$('d').value=ds||today;$('r').value='2';renderSystemTradeRules();$('adlg').showModal()}
 $('add').onclick=function(){openAdd(today)};$('acancel').onclick=function(){$('adlg').close()};$('acancelTop').onclick=function(){$('adlg').close()};
 $('o').onchange=function(){if($('o').value==='Win')$('r').value='2';else if($('o').value==='Loss')$('r').value='-1';else $('r').value='0'};
-$('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=parseFloat($('r').value);if(isNaN(r)||!$('d').value||!$('pair').value.trim()){alert('Please enter the date, pair / symbol and R result.');return}if((o==='Win'&&r<=0)||(o==='Loss'&&r>=0)||(o==='Breakeven'&&r!==0)){alert('Please make sure the R value matches the selected outcome.');return}
-  var selectedSystem={},ruleLabels={};systemConfig.groups.forEach(function(g){selectedSystem[g.id]=picked('sys_'+g.id);ruleLabels[g.id]=g.name});var totalOptions=systemConfig.groups.reduce(function(n,g){return n+g.options.length},0),followed=Object.keys(selectedSystem).reduce(function(n,k){return n+selectedSystem[k].length},0);
-  T.push({id:Date.now(),d:$('d').value,pair:$('pair').value.trim().toUpperCase(),direction:$('direction').value,lots:$('lots').value,entryPrice:$('entryPrice').value,stopPrice:$('stopPrice').value,targetPrice:$('targetPrice').value,exitPrice:$('exitPrice').value,tradeNote:$('tradeNote').value.trim(),systemRules:selectedSystem,systemRuleLabels:ruleLabels,rulesTotal:totalOptions,rulesFollowed:followed,o:o,r:r,n:''});save();$('adlg').close();render()};
+$('f').addEventListener('submit',function(e){
+  e.preventDefault();e.stopPropagation();
+  try {
+    var o=$('o').value,r=parseFloat($('r').value);
+    if(isNaN(r)||!$('d').value||!$('pair').value.trim()){alert('Please enter the date, pair / symbol and R result.');return}
+    if((o==='Win'&&r<=0)||(o==='Loss'&&r>=0)||(o==='Breakeven'&&r!==0)){alert('Please make sure the R value matches the selected outcome.');return}
+    var selectedSystem={},ruleLabels={};
+    systemConfig.groups.forEach(function(g){selectedSystem[g.id]=picked('sys_'+g.id);ruleLabels[g.id]=g.name});
+    var totalOptions=systemConfig.groups.reduce(function(n,g){return n+g.options.length},0),followed=Object.keys(selectedSystem).reduce(function(n,k){return n+selectedSystem[k].length},0);
+    var trade={id:Date.now()+Math.floor(Math.random()*1000),d:$('d').value,pair:$('pair').value.trim().toUpperCase(),direction:$('direction').value,lots:$('lots').value,entryPrice:$('entryPrice').value,stopPrice:$('stopPrice').value,targetPrice:$('targetPrice').value,exitPrice:$('exitPrice').value,tradeNote:$('tradeNote').value.trim(),systemRules:selectedSystem,systemRuleLabels:ruleLabels,rulesTotal:totalOptions,rulesFollowed:followed,o:o,r:r,n:''};
+    T.push(trade);
+    localStorage.setItem(KEY,JSON.stringify(T));
+    var verify=JSON.parse(localStorage.getItem(KEY)||'[]');
+    if(!Array.isArray(verify)||!verify.some(function(x){return x.id===trade.id}))throw new Error('Trade could not be written to this browser storage.');
+    $('adlg').close();render();
+    var rows=$('rows');if(!rows||!rows.querySelector('tr'))throw new Error('Trade saved but the history table did not refresh.');
+    var sync=$('syn');if(sync)sync.textContent='Saved locally · syncing';
+  } catch(err) { console.error('Pipdojo save trade error:',err);alert('Trade save failed: '+(err&&err.message?err.message:'Unknown error')+'. Please try again.'); }
+});
 var cur=null,stars=0;
 function setStars(n){stars=n;[].forEach.call($('stars').children,function(b,i){b.setAttribute('aria-pressed',i<n);b.textContent=i<n?'★':'☆'})}
 for(var si=1;si<=5;si++){(function(n){var b=el('button','☆','star');b.type='button';b.setAttribute('aria-label',n+' of 5');b.onclick=function(){setStars(stars===n?0:n)};$('stars').appendChild(b)})(si)}
@@ -903,6 +919,7 @@ function render(){
   Object.keys(m).sort().forEach(function(k){var s=st(m[k]),d=el('div',k);d.appendChild(el('b',s.wr.toFixed(0)+'%'));d.appendChild(el('span',f(s.r)+'R · '+s.n+' trades',cls(s.r)));ss.appendChild(d)});
 
   var rows=$('rows');rows.textContent='';var H=all.slice().reverse();$('t5').textContent='· '+H.length+' entries · all time';
+  if(!H.length){var empty=el('tr'),cell=el('td','No trades saved yet. Add a trade to see it here.','empty');cell.colSpan=7;empty.appendChild(cell);rows.appendChild(empty)}
   H.forEach(function(x){var tr=el('tr'),c=x.o==='Win'?'win':x.o==='Loss'?'loss':'open';
     [x.d,x.pair||'–',Object.keys(x.systemRules||{}).map(function(k){var g=systemConfig.groups.filter(function(z){return z.id===k})[0];return ((g?g.name:(x.systemRuleLabels&&x.systemRuleLabels[k])||'Rule'))+': '+(x.systemRules[k]||[]).join(', ')}).join(' · ')||'–'].forEach(function(v){tr.appendChild(el('td',v))});
     var oc=el('td');oc.appendChild(el('span',x.o,'badge '+c));tr.appendChild(oc);tr.appendChild(el('td',f(x.r)+'R',c));
