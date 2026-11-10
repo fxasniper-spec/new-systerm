@@ -501,6 +501,36 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 @media(prefers-reduced-motion:reduce){#landing *,#landing *:before,#landing *:after{scroll-behavior:auto!important;transition:none!important;animation:none!important}}
 </style>
 
+
+
+/* Pipdojo redesigned trade-entry form */
+#dashboardApp dialog#adlg{max-width:760px;padding:0;max-height:min(92vh,900px);overflow:auto}
+#dashboardApp dialog#adlg form.trade-entry-form{display:block;padding:22px}
+.trade-form-head{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding-bottom:16px;border-bottom:1px solid var(--line)}
+.trade-form-head h2{font-size:1.35rem;margin:3px 0}
+.trade-form-head .hint{margin:3px 0 0}
+.eyebrow{font-size:.68rem;font-weight:700;letter-spacing:.12em;color:var(--acc)}
+.icon-close{border:1px solid var(--line);background:var(--panel2);color:var(--mute);border-radius:9px;width:34px;height:34px;font-size:1.25rem;cursor:pointer}
+.trade-form-section{padding:17px 0;border-bottom:1px solid var(--line)}
+.trade-section-title{display:flex;align-items:center;gap:11px;margin-bottom:13px}
+.trade-section-title .step{display:grid;place-items:center;width:29px;height:29px;border-radius:9px;background:var(--bebg);color:var(--acc);font-size:.75rem;font-weight:800;flex:0 0 auto}
+.trade-section-title h3{font-size:.94rem;margin:0}
+.trade-section-title p{font-size:.76rem;color:var(--mute);margin:2px 0 0}
+.trade-fields{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.trade-fields-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+.trade-fields label,.trade-note-label{display:flex;flex-direction:column;gap:6px;font-size:.8rem;font-weight:600;color:var(--mute)}
+.trade-fields input,.trade-fields select,.trade-note-label textarea{width:100%;min-width:0;border:1px solid var(--line);background:var(--panel2);border-radius:9px;padding:10px 11px;color:var(--ink);font:inherit;font-size:.9rem;outline:none}
+.trade-fields input:focus,.trade-fields select:focus,.trade-note-label textarea:focus{border-color:var(--acc);box-shadow:0 0 0 2px color-mix(in srgb,var(--acc) 14%,transparent)}
+.field-note{font-size:.73rem;color:var(--mute);margin:9px 0 0}
+.trade-system-rules fieldset{margin:0 0 10px;padding:11px;border:1px solid var(--line);border-radius:10px}
+.trade-system-rules legend{padding:0 5px;font-size:.8rem;font-weight:700}
+.trade-system-rules .cb{display:flex;flex-wrap:wrap;gap:8px}
+.trade-system-rules .cb label{display:inline-flex;align-items:center;gap:6px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--panel2);font-size:.78rem;cursor:pointer}
+.trade-system-rules .cb input{accent-color:var(--acc)}
+.trade-note-label textarea{resize:vertical;min-height:62px}
+.trade-form-actions{display:flex;justify-content:flex-end;gap:8px;padding-top:16px}
+@media(max-width:560px){#dashboardApp dialog#adlg{width:calc(100% - 16px);max-height:94vh}#dashboardApp dialog#adlg form.trade-entry-form{padding:16px}.trade-fields,.trade-fields-3{grid-template-columns:1fr 1fr}.trade-fields label{font-size:.75rem}.trade-fields input,.trade-fields select{padding:9px 8px}}
+@media(max-width:360px){.trade-fields,.trade-fields-3{grid-template-columns:1fr}}
 </head>
 <body>
 <div id="landing">
@@ -640,19 +670,41 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 <section class="card"><h2>Emotion performance <span id="t6"></span></h2><div id="g5"></div></section>
 <section class="card"><h2>Execution &amp; mistakes</h2><div id="g6"></div></section>
 </div>
-<div class="grid3" id="customPerformanceCards"></div>
 <section class="card" hidden style="margin-bottom:12px"><div class="ct"><h2>Setup across sessions</h2><select aria-label="Setup" class="inl" id="sel"></select></div><div class="sess" id="sess"></div></section>
 <section class="card"><h2 style="margin-bottom:8px">Trade history <span id="t5"></span></h2><div class="tw"><table><thead><tr><th>Date</th><th>Pair / Symbol</th><th>System rules</th><th>Result</th><th>R</th><th>Review</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></section>
 <div class="acts" style="margin-top:12px"><button class="btn" id="exp" type="button">Download backup</button><button class="btn" id="imp" type="button">Restore backup</button><input accept=".json,application/json" hidden="" id="file" type="file"/></div>
 <p class="foot">Trades are saved to your account and sync across your devices. Click a day on the calendar to add a trade for that date. Download a backup now and then.</p>
 </main>
-<dialog id="adlg"><form id="f">
-<h2>Add trade</h2>
+<dialog id="adlg"><form id="f" class="trade-entry-form">
+<div class="trade-form-head"><div><div class="eyebrow">NEW JOURNAL ENTRY</div><h2>Add trade</h2><p class="hint">Record the important details. Optional fields can be left blank.</p></div><button class="icon-close" id="acancelTop" type="button" aria-label="Close">×</button></div>
+<section class="trade-form-section">
+<div class="trade-section-title"><span class="step">01</span><div><h3>Trade details</h3><p>When and what did you trade?</p></div></div>
+<div class="trade-fields">
 <label>Date<input id="d" required="" type="date"/></label>
-<label data-trade-field="pair">Pair / Symbol<input id="pair" list="pairOptions" maxlength="24" placeholder="e.g. EURUSD, XAUUSD, NQ" autocomplete="off"/><datalist id="pairOptions"><option value="EURUSD"></option><option value="GBPUSD"></option><option value="USDJPY"></option><option value="AUDUSD"></option><option value="USDCAD"></option><option value="USDCHF"></option><option value="NZDUSD"></option><option value="XAUUSD"></option><option value="XAGUSD"></option><option value="BTCUSD"></option><option value="ETHUSD"></option><option value="US30"></option><option value="NAS100"></option><option value="US500"></option><option value="NQ"></option><option value="MNQ"></option><option value="ES"></option><option value="MES"></option><option value="GC"></option></datalist></label>
+<label>Pair / Symbol<input id="pair" list="pairOptions" maxlength="24" placeholder="e.g. EURUSD, XAUUSD, NQ" autocomplete="off" required=""/><datalist id="pairOptions"><option value="EURUSD"></option><option value="GBPUSD"></option><option value="USDJPY"></option><option value="AUDUSD"></option><option value="USDCAD"></option><option value="USDCHF"></option><option value="NZDUSD"></option><option value="XAUUSD"></option><option value="XAGUSD"></option><option value="BTCUSD"></option><option value="ETHUSD"></option><option value="US30"></option><option value="NAS100"></option><option value="US500"></option><option value="NQ"></option><option value="MNQ"></option><option value="ES"></option><option value="MES"></option><option value="GC"></option></datalist></label>
+<label>Direction<select id="direction"><option value="">Select direction</option><option value="Buy">Buy / Long</option><option value="Sell">Sell / Short</option></select></label>
+<label>Lot size / Quantity<input id="lots" type="number" min="0" step="any" placeholder="e.g. 0.10"/></label>
+</div></section>
+<section class="trade-form-section">
+<div class="trade-section-title"><span class="step">02</span><div><h3>Entry &amp; exit</h3><p>Optional price details for a more complete record.</p></div></div>
+<div class="trade-fields trade-fields-3">
+<label>Entry price<input id="entryPrice" type="number" step="any" placeholder="Entry"/></label>
+<label>Stop loss<input id="stopPrice" type="number" step="any" placeholder="Stop loss"/></label>
+<label>Take profit<input id="targetPrice" type="number" step="any" placeholder="Take profit"/></label>
+<label>Exit price<input id="exitPrice" type="number" step="any" placeholder="Exit"/></label>
 <label>Outcome<select id="o"><option>Win</option><option>Loss</option><option>Breakeven</option></select></label>
-<label id="rl">R reached<input id="r" min="0.1" step="0.1" type="number" value="2"/></label>
-<div id="systemTradeRules" class="wide"></div><div class="acts"><button class="btn main" type="submit">Save trade</button><button class="btn" id="acancel" type="button">Cancel</button></div>
+<label id="rl">Result (R)<input id="r" min="-20" max="100" step="0.1" type="number" value="2" required/></label>
+</div><p class="field-note">Use a negative R value for a loss (for example, −1R) and 0R for breakeven.</p>
+</section>
+<section class="trade-form-section">
+<div class="trade-section-title"><span class="step">03</span><div><h3>Your trading system</h3><p>Select the setup and rules that applied to this trade.</p></div></div>
+<div id="systemTradeRules" class="trade-system-rules"></div>
+</section>
+<section class="trade-form-section">
+<div class="trade-section-title"><span class="step">04</span><div><h3>Quick note</h3><p>Anything important you want to remember?</p></div></div>
+<label class="trade-note-label">Trade note <textarea id="tradeNote" rows="2" maxlength="500" placeholder="Why did you take this trade? What should you remember?"></textarea></label>
+</section>
+<div class="trade-form-actions"><button class="btn" id="acancel" type="button">Cancel</button><button class="btn main" type="submit">Save trade</button></div>
 </form></dialog>
 <dialog id="editSystemDlg"><h2>Edit system</h2><p class="hint">Build your own strategy structure. Add a rule group (for example, Timeframe), then add options under it (for example, H4 and 15m). Each trader has a separate system.</p><div id="systemBuilder"></div><div class="acts"><button class="btn main" id="saveSystem" type="button">Save system</button><button class="btn" id="cancelSystem" type="button">Close</button></div></dialog>
 <dialog id="dlg"><form id="rf">
@@ -674,18 +726,11 @@ var LEVELS=["ALQ","Momentum Trap","SMT","HRLQ","WOG","FVG fill"];
 var TFS=["15m","H1","H4","D","W"];
 var EMOTIONS=["Calm","Confident","Hesitant","FOMO","Fear","Greed","Revenge","Bored"];
 var MISTAKES=["Followed plan","Early entry","Late entry","Moved SL","Closed early","Over-risked","Broke rules"];
-var SEED=[
- {d:"2026-10-05",s:"PB",ss:"Asian",tf:["D"],lv:["Momentum Trap"],o:"Loss",r:-1},
- {d:"2026-10-05",s:"PB",ss:"Asian",tf:["H4"],lv:["Momentum Trap"],o:"Loss",r:-1},
- {d:"2026-10-07",s:"PB",ss:"London",tf:["H1"],lv:["ALQ"],o:"Loss",r:-1},
- {d:"2026-10-08",s:"PB",ss:"Frankfurt",tf:["15m"],lv:["Momentum Trap"],o:"Loss",r:-1}
-];
 window.startApp=function(){
 var KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
 var p2=function(n){return (n<10?'0':'')+n},ld=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
 var now=new Date(),today=ld(now),cal=new Date(now.getFullYear(),now.getMonth(),1);
-function seed(){return SEED.map(function(x,i){x.id=i+1;return x})}
-function load(){try{var v=localStorage.getItem(KEY);if(v===null){T=seed();save()}else{T=JSON.parse(v);if(!Array.isArray(T))T=[]}}catch(e){T=seed()}}
+function load(){try{var v=localStorage.getItem(KEY);if(v===null){T=[];save()}else{T=JSON.parse(v);if(!Array.isArray(T))T=[]}}catch(e){T=[]}}
 function save(){try{localStorage.setItem(KEY,JSON.stringify(T))}catch(e){}}
 function el(t,x,c){var e=document.createElement(t);if(x!==undefined)e.textContent=x;if(c)e.className=c;return e}
 function sv(t,a){var e=document.createElementNS(NS,t);for(var k in a)e.setAttribute(k,a[k]);return e}
@@ -741,19 +786,12 @@ function groupRows(id,key,a){
     r.appendChild(el('span',k));r.appendChild(el('span',s.wr.toFixed(1)+'% ('+s.n+') '+f(s.r)+'R','v'));
     var b=el('div',undefined,'bar'),i=el('i');i.style.width=s.wr+'%';b.appendChild(i);r.appendChild(b);box.appendChild(r)});
 }
-
-function renderCustomPerformance(trades){
-  var host=$('customPerformanceCards');if(!host)return;host.textContent='';
-  systemConfig.groups.filter(function(g){return g.showInPerformance===true&&g.options&&g.options.length}).forEach(function(g){
-    var card=el('section',undefined,'card'),head=el('h2',g.name+' performance');card.appendChild(head);
-    var used=0;
-    g.options.forEach(function(option){var bucket=trades.filter(function(t){return t.systemRules&&Array.isArray(t.systemRules[g.id])&&t.systemRules[g.id].indexOf(option)>=0});if(!bucket.length)return;used++;
-      var stats=st(bucket),row=el('div',undefined,'row');row.appendChild(el('span',option));row.appendChild(el('span',stats.wr.toFixed(1)+'% ('+stats.n+') '+f(stats.r)+'R','v'));
-      var bar=el('div',undefined,'bar'),fill=el('i');fill.style.width=Math.max(0,Math.min(100,stats.wr))+'%';bar.appendChild(fill);row.appendChild(bar);card.appendChild(row);
-    });
-    if(!used)card.appendChild(el('div','No trades for this group in this period','empty'));
-    host.appendChild(card);
-  });
+function systemGroupRows(id,groupName,a){
+  var box=$(id);box.textContent='';var gid=groupName==='Setup'?'grp_setup':'grp_levels',g=systemConfig.groups.filter(function(x){return x.id===gid||x.name.toLowerCase()===groupName.toLowerCase()})[0],m={};
+  if(g)a.forEach(function(x){var vals=x.systemRules&&x.systemRules[g.id];if(!Array.isArray(vals))return;vals.forEach(function(v){(m[v]=m[v]||[]).push(x)})});
+  var ks=Object.keys(m).sort();
+  if(!ks.length){box.appendChild(el('div',g?'No trades recorded for '+groupName:'Add a '+groupName+' group in Edit system to track performance','empty'));return}
+  ks.forEach(function(k){var s=st(m[k]),r=el('div',undefined,'row');r.appendChild(el('span',k));r.appendChild(el('span',s.wr.toFixed(1)+'% ('+s.n+') '+f(s.r)+'R','v'));var b=el('div',undefined,'bar'),i=el('i');i.style.width=s.wr+'%';b.appendChild(i);r.appendChild(b);box.appendChild(r)});
 }
 
 function monthRows(a){
@@ -788,15 +826,16 @@ $('nm').onclick=function(){cal=new Date(cal.getFullYear(),cal.getMonth()+1,1);dr
 $('tm').onclick=function(){cal=new Date(now.getFullYear(),now.getMonth(),1);drawCal()};
 
 // ---- dialogs
-function openAdd(ds){$('d').value=ds||today;$('pair').value='';renderSystemTradeRules();$('adlg').showModal()}
-$('add').onclick=function(){openAdd(today)};$('acancel').onclick=function(){$('adlg').close()};
-$('o').onchange=function(){var w=$('o').value==='Win';$('r').disabled=!w;$('rl').style.opacity=w?1:.5};
-$('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=o==='Win'?parseFloat($('r').value):(o==='Loss'?-1:0);if(isNaN(r))return;
-  var selectedSystem={};systemConfig.groups.forEach(function(g){selectedSystem[g.id]=picked('sys_'+g.id)});var totalOptions=systemConfig.groups.reduce(function(n,g){return n+g.options.length},0),followed=Object.keys(selectedSystem).reduce(function(n,k){return n+selectedSystem[k].length},0);T.push({id:Date.now(),d:$('d').value,pair:$('pair').value.trim().toUpperCase(),systemRules:selectedSystem,rulesTotal:totalOptions,rulesFollowed:followed,o:o,r:r,n:''});save();$('adlg').close();render()};
+function openAdd(ds){$('f').reset();$('d').value=ds||today;$('r').value='2';renderSystemTradeRules();$('adlg').showModal()}
+$('add').onclick=function(){openAdd(today)};$('acancel').onclick=function(){$('adlg').close()};$('acancelTop').onclick=function(){$('adlg').close()};
+$('o').onchange=function(){if($('o').value==='Win')$('r').value='2';else if($('o').value==='Loss')$('r').value='-1';else $('r').value='0'};
+$('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=parseFloat($('r').value);if(isNaN(r)||!$('d').value||!$('pair').value.trim()){alert('Please enter the date, pair / symbol and R result.');return}if((o==='Win'&&r<=0)||(o==='Loss'&&r>=0)||(o==='Breakeven'&&r!==0)){alert('Please make sure the R value matches the selected outcome.');return}
+  var selectedSystem={},ruleLabels={};systemConfig.groups.forEach(function(g){selectedSystem[g.id]=picked('sys_'+g.id);ruleLabels[g.id]=g.name});var totalOptions=systemConfig.groups.reduce(function(n,g){return n+g.options.length},0),followed=Object.keys(selectedSystem).reduce(function(n,k){return n+selectedSystem[k].length},0);
+  T.push({id:Date.now(),d:$('d').value,pair:$('pair').value.trim().toUpperCase(),direction:$('direction').value,lots:$('lots').value,entryPrice:$('entryPrice').value,stopPrice:$('stopPrice').value,targetPrice:$('targetPrice').value,exitPrice:$('exitPrice').value,tradeNote:$('tradeNote').value.trim(),systemRules:selectedSystem,systemRuleLabels:ruleLabels,rulesTotal:totalOptions,rulesFollowed:followed,o:o,r:r,n:''});save();$('adlg').close();render()};
 var cur=null,stars=0;
 function setStars(n){stars=n;[].forEach.call($('stars').children,function(b,i){b.setAttribute('aria-pressed',i<n);b.textContent=i<n?'★':'☆'})}
 for(var si=1;si<=5;si++){(function(n){var b=el('button','☆','star');b.type='button';b.setAttribute('aria-label',n+' of 5');b.onclick=function(){setStars(stars===n?0:n)};$('stars').appendChild(b)})(si)}
-function openReview(x){cur=x;$('rt').textContent=x.d+' · '+(x.pair||'No pair')+' · '+x.s+' · '+x.ss+' · '+f(x.r)+'R';var cv=$('customReview');cv.textContent='';if(x.pair){var pl=el('div','Pair / Symbol: '+x.pair);pl.style.margin='3px 0';cv.appendChild(pl)}Object.keys(x.systemRules||{}).forEach(function(k){var g=systemConfig.groups.filter(function(z){return z.id===k})[0],line=el('div',(g?g.name:'Rule')+': '+(x.systemRules[k]||[]).join(', '));line.style.margin='3px 0';cv.appendChild(line)});if(typeof x.rulesTotal==='number'&&x.rulesTotal>0){var rl=el('div','Rule discipline: '+(x.rulesFollowed||0)+' / '+x.rulesTotal+' options selected');rl.style.margin='6px 0';cv.appendChild(rl)}boxes('re',EMOTIONS,x.emo);boxes('rm',MISTAKES,x.mis);setStars(x.stars||0);$('rg').value=x.good||'';$('rn').value=x.lesson||'';$('dlg').showModal()}
+function openReview(x){cur=x;$('rt').textContent=x.d+' · '+(x.pair||'No pair')+' · '+f(x.r)+'R';var cv=$('customReview');cv.textContent='';if(x.pair){var pl=el('div','Pair / Symbol: '+x.pair);pl.style.margin='3px 0';cv.appendChild(pl)}var meta=[['Direction',x.direction],['Lot size / Quantity',x.lots],['Entry',x.entryPrice],['Stop loss',x.stopPrice],['Take profit',x.targetPrice],['Exit',x.exitPrice],['Note',x.tradeNote]];meta.forEach(function(p){if(p[1]){var line=el('div',p[0]+': '+p[1]);line.style.margin='3px 0';cv.appendChild(line)}});Object.keys(x.systemRules||{}).forEach(function(k){var g=systemConfig.groups.filter(function(z){return z.id===k})[0],line=el('div',(g?g.name:(x.systemRuleLabels&&x.systemRuleLabels[k])||'Rule')+': '+(x.systemRules[k]||[]).join(', '));line.style.margin='3px 0';cv.appendChild(line)});if(typeof x.rulesTotal==='number'&&x.rulesTotal>0){var rl=el('div','Rule discipline: '+(x.rulesFollowed||0)+' / '+x.rulesTotal+' options selected');rl.style.margin='6px 0';cv.appendChild(rl)}boxes('re',EMOTIONS,x.emo);boxes('rm',MISTAKES,x.mis);setStars(x.stars||0);$('rg').value=x.good||'';$('rn').value=x.lesson||'';$('dlg').showModal()}
 $('rf').onsubmit=function(e){e.preventDefault();if(!cur)return;cur.emo=picked('re');cur.mis=picked('rm');cur.stars=stars;cur.good=$('rg').value.trim();cur.lesson=$('rn').value.trim();save();$('dlg').close();render()};
 $('rcancel').onclick=function(){$('dlg').close()};
 
@@ -810,12 +849,12 @@ $('file').onchange=function(){var fl=this.files[0];if(!fl)return;var r=new FileR
 // ---- Edit system: each trader builds their own rule groups and options
 var FORM_KEY='pipdojo-trade-form-v1';
 var systemConfig=loadSystemConfig();
-function loadSystemConfig(){try{var x=JSON.parse(localStorage.getItem(FORM_KEY));if(x&&Array.isArray(x.groups))return{groups:x.groups.filter(function(g){return g&&g.id&&g.name}).map(function(g){return{id:String(g.id),name:String(g.name),options:Array.isArray(g.options)?g.options.map(String):[],showInPerformance:g.showInPerformance===true}})};if(x&&Array.isArray(x.rules)&&x.rules.length)return{groups:[{id:'grp_'+Date.now(),name:'My rules',options:x.rules.map(String)}]}}catch(e){}return{groups:[]}}
+function loadSystemConfig(){try{var x=JSON.parse(localStorage.getItem(FORM_KEY));if(x&&Array.isArray(x.groups))return{groups:x.groups.filter(function(g){return g&&g.id&&g.name}).map(function(g){return{id:String(g.id),name:String(g.name),options:Array.isArray(g.options)?g.options.map(String):[]}})};if(x&&Array.isArray(x.rules)&&x.rules.length)return{groups:[{id:'grp_'+Date.now(),name:'My rules',options:x.rules.map(String)}]}}catch(e){}return{groups:[{id:'grp_setup',name:'Setup',options:['PB','Double Sweep','5m RBOS','PDC','Double PDC','Andro','London Close','Accelerated PB','Accelerated RBOS','Continuation 5m','Continuation 15m','KBOS MIT']},{id:'grp_levels',name:'Levels',options:['ALQ','Momentum Trap','SMT','HRLQ','WOG','FVG fill']}]}}
 function saveSystemConfig(){try{localStorage.setItem(FORM_KEY,JSON.stringify(systemConfig))}catch(e){}}
 function renderSystemTradeRules(selected){var box=$('systemTradeRules');box.textContent='';systemConfig.groups.forEach(function(g){var fs=el('fieldset'),lg=el('legend',g.name),wrap=el('div',undefined,'cb');fs.appendChild(lg);g.options.forEach(function(v){var lab=el('label'),cb=document.createElement('input');cb.type='checkbox';cb.value=v;cb.name='sys_'+g.id;cb.checked=!!(selected&&selected[g.id]&&selected[g.id].indexOf(v)>=0);lab.appendChild(cb);lab.appendChild(document.createTextNode(' '+v));wrap.appendChild(lab)});fs.appendChild(wrap);box.appendChild(fs)})}
-function buildSystemEditor(){var box=$('systemBuilder');box.textContent='';if(!systemConfig.groups.length)box.appendChild(el('p','No rules yet. Start by adding a rule group, such as Timeframe, Entry condition, Risk management or Confirmation.','hint'));systemConfig.groups.forEach(function(g){var card=el('section',undefined,'msec'),head=el('div',undefined,'mrow'),name=document.createElement('input'),del=el('button','Remove group','btn small');name.value=g.name;name.maxLength=40;name.placeholder='Rule group name';name.onchange=function(){g.name=name.value.trim()||'Untitled rule'};del.type='button';del.onclick=function(){if(confirm('Remove this rule group and its options?')){systemConfig.groups=systemConfig.groups.filter(function(x){return x.id!==g.id});buildSystemEditor()}};head.appendChild(name);head.appendChild(del);card.appendChild(head);var perfRow=el('label',undefined,'perf-toggle');perfRow.style.cssText='display:flex;align-items:center;gap:9px;margin:10px 0;padding:9px 11px;border:1px solid var(--line);border-radius:10px;font-size:.84rem;';var perf=document.createElement('input');perf.type='checkbox';perf.checked=g.showInPerformance===true;perf.onchange=function(){g.showInPerformance=perf.checked};var perfText=el('span','Show this group in Dashboard Performance');perfRow.appendChild(perf);perfRow.appendChild(perfText);card.appendChild(perfRow);card.appendChild(el('div','Options under '+g.name,'hint'));var pills=el('div',undefined,'pills');g.options.forEach(function(v){var pill=el('span',v+' ','pill'),rm=el('button','×');rm.type='button';rm.onclick=function(){g.options=g.options.filter(function(x){return x!==v});buildSystemEditor()};pill.appendChild(rm);pills.appendChild(pill)});card.appendChild(pills);var row=el('div',undefined,'mrow'),inp=document.createElement('input'),add=el('button','Add option','btn small');inp.maxLength=40;inp.placeholder='e.g. H4 or 15m';add.type='button';var addOpt=function(){var v=inp.value.trim();if(!v)return;if(g.options.some(function(x){return x.toLowerCase()===v.toLowerCase()})){alert('This option already exists in this group.');return}g.options.push(v);buildSystemEditor()};add.onclick=addOpt;inp.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();addOpt()}};row.appendChild(inp);row.appendChild(add);card.appendChild(row);box.appendChild(card)});var addrow=el('div',undefined,'mrow'),groupName=document.createElement('input'),addGroup=el('button','Add rule group','btn main');groupName.maxLength=40;groupName.placeholder='New rule group (e.g. Timeframe)';addGroup.type='button';addGroup.onclick=function(){var v=groupName.value.trim();if(!v)return;if(systemConfig.groups.some(function(g){return g.name.toLowerCase()===v.toLowerCase()})){alert('This group already exists.');return}systemConfig.groups.push({id:'grp'+Date.now(),name:v,options:[],showInPerformance:false});buildSystemEditor()};addrow.appendChild(groupName);addrow.appendChild(addGroup);box.appendChild(addrow)}
+function buildSystemEditor(){var box=$('systemBuilder');box.textContent='';if(!systemConfig.groups.length)box.appendChild(el('p','No rules yet. Start by adding a rule group, such as Timeframe, Entry condition, Risk management or Confirmation.','hint'));systemConfig.groups.forEach(function(g){var card=el('section',undefined,'msec'),head=el('div',undefined,'mrow'),name=document.createElement('input'),del=el('button','Remove group','btn small');name.value=g.name;name.maxLength=40;name.placeholder='Rule group name';name.onchange=function(){g.name=name.value.trim()||'Untitled rule'};del.type='button';del.onclick=function(){if(confirm('Remove this rule group and its options?')){systemConfig.groups=systemConfig.groups.filter(function(x){return x.id!==g.id});buildSystemEditor()}};head.appendChild(name);head.appendChild(del);card.appendChild(head);card.appendChild(el('div','Options under '+g.name,'hint'));var pills=el('div',undefined,'pills');g.options.forEach(function(v){var pill=el('span',v+' ','pill'),rm=el('button','×');rm.type='button';rm.onclick=function(){g.options=g.options.filter(function(x){return x!==v});buildSystemEditor()};pill.appendChild(rm);pills.appendChild(pill)});card.appendChild(pills);var row=el('div',undefined,'mrow'),inp=document.createElement('input'),add=el('button','Add option','btn small');inp.maxLength=40;inp.placeholder='e.g. H4 or 15m';add.type='button';var addOpt=function(){var v=inp.value.trim();if(!v)return;if(g.options.some(function(x){return x.toLowerCase()===v.toLowerCase()})){alert('This option already exists in this group.');return}g.options.push(v);buildSystemEditor()};add.onclick=addOpt;inp.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();addOpt()}};row.appendChild(inp);row.appendChild(add);card.appendChild(row);box.appendChild(card)});var addrow=el('div',undefined,'mrow'),groupName=document.createElement('input'),addGroup=el('button','Add rule group','btn main');groupName.maxLength=40;groupName.placeholder='New rule group (e.g. Timeframe)';addGroup.type='button';addGroup.onclick=function(){var v=groupName.value.trim();if(!v)return;if(systemConfig.groups.some(function(g){return g.name.toLowerCase()===v.toLowerCase()})){alert('This group already exists.');return}systemConfig.groups.push({id:'grp'+Date.now(),name:v,options:[]});buildSystemEditor()};addrow.appendChild(groupName);addrow.appendChild(addGroup);box.appendChild(addrow)}
 $('editSystem').onclick=function(){buildSystemEditor();$('editSystemDlg').showModal()};
-$('saveSystem').onclick=function(){systemConfig.groups=systemConfig.groups.map(function(g){return{id:g.id,name:g.name.trim()||'Untitled rule',options:g.options,showInPerformance:g.showInPerformance===true}});saveSystemConfig();$('editSystemDlg').close()};
+$('saveSystem').onclick=function(){systemConfig.groups=systemConfig.groups.map(function(g){return{id:g.id,name:g.name.trim()||'Untitled rule',options:g.options}});saveSystemConfig();$('editSystemDlg').close()};
 $('cancelSystem').onclick=function(){$('editSystemDlg').close()};
 // ---- tabs
 var TABS=[['today','Today'],['week','Week'],['month','Month'],['ytd','YTD'],['all','All time']];
@@ -849,7 +888,7 @@ function render(){
   $('score').textContent=D.length?(sc.reduce(function(a,b){return a+b},0)/6).toFixed(1):'–';
 
   drawCal();
-  groupRows('g1','ss',D);groupRows('g2','s',D);groupRows('g3','lv',D);groupRows('g4','tf',D);monthRows(all);renderCustomPerformance(D);
+  groupRows('g1','ss',D);systemGroupRows('g2','Setup',D);systemGroupRows('g3','Levels',D);groupRows('g4','tf',D);monthRows(all);
   var RV=D.filter(function(x){return x.emo&&x.emo.length||x.mis&&x.mis.length||x.stars}),rt=RV.filter(function(x){return x.stars});
   $('t6').textContent=RV.length?'· '+RV.length+' reviewed'+(rt.length?' · avg execution '+(rt.reduce(function(a,x){return a+x.stars},0)/rt.length).toFixed(1)+'/5':''):'';
   groupRows('g5','emo',RV.filter(function(x){return x.emo&&x.emo.length}));groupRows('g6','mis',RV.filter(function(x){return x.mis&&x.mis.length}));
@@ -859,16 +898,18 @@ function render(){
   if(!sub.length)ss.appendChild(el('div','No trades for this setup in this period','empty'));
   Object.keys(m).sort().forEach(function(k){var s=st(m[k]),d=el('div',k);d.appendChild(el('b',s.wr.toFixed(0)+'%'));d.appendChild(el('span',f(s.r)+'R · '+s.n+' trades',cls(s.r)));ss.appendChild(d)});
 
-  var rows=$('rows');rows.textContent='';var H=D.slice().reverse();$('t5').textContent='· '+H.length+' entries';
+  var rows=$('rows');rows.textContent='';var H=all.slice().reverse();$('t5').textContent='· '+H.length+' entries · all time';
   H.forEach(function(x){var tr=el('tr'),c=x.o==='Win'?'win':x.o==='Loss'?'loss':'open';
-    [x.d,x.pair||'–',Object.keys(x.systemRules||{}).map(function(k){var g=systemConfig.groups.filter(function(z){return z.id===k})[0];return (g?g.name:'Rule')+': '+(x.systemRules[k]||[]).join(', ')}).join(' · ')||'–'].forEach(function(v){tr.appendChild(el('td',v))});
+    [x.d,x.pair||'–',Object.keys(x.systemRules||{}).map(function(k){var g=systemConfig.groups.filter(function(z){return z.id===k})[0];return ((g?g.name:(x.systemRuleLabels&&x.systemRuleLabels[k])||'Rule'))+': '+(x.systemRules[k]||[]).join(', ')}).join(' · ')||'–'].forEach(function(v){tr.appendChild(el('td',v))});
     var oc=el('td');oc.appendChild(el('span',x.o,'badge '+c));tr.appendChild(oc);tr.appendChild(el('td',f(x.r)+'R',c));
     var rc=el('td'),has=x.stars||x.good||x.lesson||(x.emo&&x.emo.length)||(x.mis&&x.mis.length),rb=el('button',has?((x.stars?'★'.repeat(x.stars)+'☆'.repeat(5-x.stars)+' ':'')+'Edit'):'Add review','btn small');
     if(x.lesson)rb.title=x.lesson;rb.onclick=function(){openReview(x)};rc.appendChild(rb);tr.appendChild(rc);
     var td=el('td'),b=el('button','×','del');b.setAttribute('aria-label','Delete trade');b.onclick=function(){if(confirm('Delete this trade?')){T=T.filter(function(y){return y.id!==x.id});save();render()}};td.appendChild(b);tr.appendChild(td);rows.appendChild(tr)});
 }
 $('sel').onchange=render;
-load();render();
+load();
+T.forEach(function(x){if(!x.systemRules||!Object.keys(x.systemRules).length){var legacySetup=Array.isArray(x.s)?x.s:(x.s?[x.s]:[]),legacyLevels=Array.isArray(x.lv)?x.lv:(x.lv?[x.lv]:[]);if(legacySetup.length||legacyLevels.length){x.systemRules=x.systemRules||{};x.systemRuleLabels=x.systemRuleLabels||{};var sg=systemConfig.groups.filter(function(g){return g.id==='grp_setup'||g.name.toLowerCase()==='setup'})[0],lg=systemConfig.groups.filter(function(g){return g.id==='grp_levels'||g.name.toLowerCase()==='levels'})[0];if(sg){x.systemRules[sg.id]=legacySetup;x.systemRuleLabels[sg.id]=sg.name}if(lg){x.systemRules[lg.id]=legacyLevels;x.systemRuleLabels[lg.id]=lg.name}}}});
+render();
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.js"></script>
@@ -882,7 +923,7 @@ var orig=Storage.prototype.setItem;
 Storage.prototype.setItem=function(k,v){orig.call(this,k,v);if(ready&&this===localStorage&&(k===TK||k===LK||k==='pipdojo-trade-form-v1'))queue()};
 function status(t){var s=$('syn');if(s)s.textContent=t}
 function queue(){status('Saving...');clearTimeout(timer);timer=setTimeout(push,800)}
-function local(){var t=[],l=null;try{t=JSON.parse(localStorage.getItem(TK))||[]}catch(e){}try{l=JSON.parse(localStorage.getItem(LK))}catch(e){}var f=null;try{f=JSON.parse(localStorage.getItem('pipdojo-trade-form-v1'))}catch(e){}if(l&&f)l.tradeForm=f;return{t:t,l:l}}
+function local(){var t=[],l=null;try{t=JSON.parse(localStorage.getItem(TK))||[]}catch(e){}try{l=JSON.parse(localStorage.getItem(LK))}catch(e){}var f=null;try{f=JSON.parse(localStorage.getItem('pipdojo-trade-form-v1'))}catch(e){}if(!l||typeof l!=='object')l={};if(f)l.tradeForm=f;return{t:t,l:l}}
 async function push(){
   timer=null;var d=local(),ts=new Date().toISOString();
   var r=await sb.from('journal_data').upsert({user_id:user.id,trades:d.t,lists:d.l,updated_at:ts});
@@ -892,13 +933,18 @@ async function push(){
 function pull(){return sb.from('journal_data').select('trades,lists,updated_at').eq('user_id',user.id).maybeSingle()}
 function applyRemote(row){
   orig.call(localStorage,TK,JSON.stringify(row.trades||[]));
-  if(row.lists){orig.call(localStorage,LK,JSON.stringify(row.lists));if(row.lists.tradeForm)orig.call(localStorage,'pipdojo-trade-form-v1',JSON.stringify(row.lists.tradeForm))}
+  if(row.lists){orig.call(localStorage,LK,JSON.stringify(row.lists));if(row.lists.tradeForm)orig.call(localStorage,'pipdojo-trade-form-v1',JSON.stringify(row.lists.tradeForm));else orig.call(localStorage,'pipdojo-trade-form-v1',JSON.stringify({groups:[]}))}
+  else{orig.call(localStorage,LK,JSON.stringify({}));orig.call(localStorage,'pipdojo-trade-form-v1',JSON.stringify({groups:[]}))}
   orig.call(localStorage,STK,row.updated_at)
 }
 async function begin(u){
   if(started)return;started=true;user=u;
   try{var LU='pipdojo-last-user',lu=localStorage.getItem(LU);
-    if(lu&&lu!==u.id){[TK,LK,STK,BK].forEach(function(k){localStorage.removeItem(k)})}
+    if(lu!==u.id){
+      var oldTrades=localStorage.getItem(TK);
+      if(oldTrades){try{orig.call(localStorage,BK,oldTrades)}catch(e){}}
+      [TK,LK,STK,'pipdojo-trade-form-v1'].forEach(function(k){localStorage.removeItem(k)})
+    }
     orig.call(localStorage,LU,u.id)}catch(e){}
   $('lstate').textContent='Loading your journal...';$('lf').hidden=true;$('lerr2').textContent='';
   var r=await pull();
