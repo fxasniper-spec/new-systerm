@@ -731,6 +731,9 @@ var EMOTIONS=["Calm","Confident","Hesitant","FOMO","Fear","Greed","Revenge","Bor
 var MISTAKES=["Followed plan","Early entry","Late entry","Moved SL","Closed early","Over-risked","Broke rules"];
 window.startApp=function(){
 var KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
+// Initialize the trader's system before the first dashboard render.
+var FORM_KEY='pipdojo-trade-form-v1';
+var systemConfig=loadSystemConfig();
 var p2=function(n){return (n<10?'0':'')+n},ld=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
 var now=new Date(),today=ld(now),cal=new Date(now.getFullYear(),now.getMonth(),1);
 function load(){try{var v=localStorage.getItem(KEY);if(v===null){T=[];save()}else{T=JSON.parse(v);if(!Array.isArray(T))T=[]}}catch(e){T=[]}}
@@ -850,8 +853,6 @@ $('file').onchange=function(){var fl=this.files[0];if(!fl)return;var r=new FileR
   if(confirm('Replace your current '+T.length+' trades with '+a.length+' trades from this file?')){T=a;save();render()}}catch(e){alert('That file is not a valid journal backup.')}};r.readAsText(fl);this.value=''};
 
 // ---- Edit system: each trader builds their own rule groups and options
-var FORM_KEY='pipdojo-trade-form-v1';
-var systemConfig=loadSystemConfig();
 function loadSystemConfig(){try{var x=JSON.parse(localStorage.getItem(FORM_KEY));if(x&&Array.isArray(x.groups))return{groups:x.groups.filter(function(g){return g&&g.id&&g.name}).map(function(g){return{id:String(g.id),name:String(g.name),options:Array.isArray(g.options)?g.options.map(String):[]}})};if(x&&Array.isArray(x.rules)&&x.rules.length)return{groups:[{id:'grp_'+Date.now(),name:'My rules',options:x.rules.map(String)}]}}catch(e){}return{groups:[{id:'grp_setup',name:'Setup',options:['PB','Double Sweep','5m RBOS','PDC','Double PDC','Andro','London Close','Accelerated PB','Accelerated RBOS','Continuation 5m','Continuation 15m','KBOS MIT']},{id:'grp_levels',name:'Levels',options:['ALQ','Momentum Trap','SMT','HRLQ','WOG','FVG fill']}]}}
 function saveSystemConfig(){try{localStorage.setItem(FORM_KEY,JSON.stringify(systemConfig))}catch(e){}}
 function renderSystemTradeRules(selected){var box=$('systemTradeRules');box.textContent='';systemConfig.groups.forEach(function(g){var fs=el('fieldset'),lg=el('legend',g.name),wrap=el('div',undefined,'cb');fs.appendChild(lg);g.options.forEach(function(v){var lab=el('label'),cb=document.createElement('input');cb.type='checkbox';cb.value=v;cb.name='sys_'+g.id;cb.checked=!!(selected&&selected[g.id]&&selected[g.id].indexOf(v)>=0);lab.appendChild(cb);lab.appendChild(document.createTextNode(' '+v));wrap.appendChild(lab)});fs.appendChild(wrap);box.appendChild(fs)})}
