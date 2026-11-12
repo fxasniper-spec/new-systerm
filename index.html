@@ -5,10 +5,11 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Pipdojo — Trading Journal</title>
 <meta name="description" content="A trading journal for forex traders. Log trades, review performance and understand your results.">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%23c4122f'/%3E%3C/svg%3E">
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Ccircle cx='16' cy='16' r='12' fill='%237c3aed'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Shippori+Mincho+B1:wght@800&family=Zen+Kaku+Gothic+New:wght@400;700&family=IBM+Plex+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 
 :root{--bg:#f3f3f8;--panel:#fff;--panel2:#f6f6fb;--ink:#1e1b3a;--mute:#6f6c8a;--line:#e6e5f0;--win:#2fb67e;--loss:#ee6b6b;--be:#7b8cf0;--acc:#5b45d6;--winbg:#d9f3e6;--lossbg:#fbdede;--bebg:#dfe3fb}
@@ -170,7 +171,7 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 <style>
 
 
-#landing{--ink:#101a2b;--ink2:#17243b;--washi:#ece6d8;--mute:#9aa5b8;--sun:#c4122f;--line:#2f4064;--gain:#4cc29a}
+#landing{--ink:#101a2b;--ink2:#17243b;--washi:#ece6d8;--mute:#9aa5b8;--sun:#7c3aed;--line:#2f4064;--gain:#4cc29a}
 
 
 #landing *{box-sizing:border-box}
@@ -228,7 +229,7 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 #landing .btn.primary{background:var(--sun);color:#fff}
 
 
-#landing .btn.primary:hover{background:#a80f28}
+#landing .btn.primary:hover{background:#6d28d9}
 
 
 #landing .btn.ghost{border:1px solid var(--mute);color:var(--washi)}
@@ -392,18 +393,18 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 #landing header{position:sticky;top:0;z-index:20;background:rgba(16,26,43,.88);-webkit-backdrop-filter:blur(10px);backdrop-filter:blur(10px);border-bottom:1px solid rgba(47,64,100,.55)}
 #landing header .wrap{padding-top:14px;padding-bottom:14px}
 #landing nav a.keep{background:var(--sun);border-color:var(--sun);color:#fff;font-weight:700}
-#landing nav a.keep:hover{background:#a80f28;color:#fff}
-#landing .hero{background:radial-gradient(ellipse 55% 60% at 76% 92%,rgba(196,18,47,.30),transparent 70%),radial-gradient(ellipse 40% 40% at 10% 0%,rgba(76,194,154,.08),transparent 70%);padding-top:72px}
-#landing .hero .hl{color:#ee4a63}
+#landing nav a.keep:hover{background:#6d28d9;color:#fff}
+#landing .hero{background:radial-gradient(ellipse 55% 60% at 76% 92%,rgba(124,58,237,.30),transparent 70%),radial-gradient(ellipse 40% 40% at 10% 0%,rgba(76,194,154,.08),transparent 70%);padding-top:72px}
+#landing .hero .hl{color:#a78bfa}
 #landing .btn{border-radius:8px;transition:transform .15s,background .15s,border-color .15s}
 #landing .btn:hover{transform:translateY(-2px)}
-#landing .btn.primary{box-shadow:0 8px 24px rgba(196,18,47,.35)}
+#landing .btn.primary{box-shadow:0 8px 24px rgba(124,58,237,.35)}
 #landing .trust{list-style:none;margin:14px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:10px 26px;color:var(--mute);font-size:15px}
 #landing .trust li::before{content:"\2713";color:var(--gain);font-weight:700;margin-right:8px}
 #landing section h2{position:relative}
 #landing .lead h2::before,#landing .split h2::before{content:"";display:block;width:44px;height:4px;border-radius:2px;background:var(--sun);margin-bottom:18px}
 #landing .pane{border:1px solid var(--line);border-radius:12px}
-#landing .fill{border-radius:2px;background:linear-gradient(90deg,#8e0d22,var(--sun))}
+#landing .fill{border-radius:2px;background:linear-gradient(90deg,#5b21b6,var(--sun))}
 #features .split{display:block}
 #features .items{display:grid;grid-template-columns:repeat(auto-fit,minmax(270px,1fr));gap:16px;margin-top:36px}
 #landing .items>div{margin:0;background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:26px;transition:transform .2s,border-color .2s}
@@ -413,14 +414,14 @@ dialog{border-radius:12px;box-shadow:0 20px 50px rgba(10,15,30,.28)}
 #landing .reports{gap:16px}
 #landing ol li{background:var(--ink2);border:1px solid var(--line);border-radius:12px;padding:24px;margin-bottom:16px;align-items:center}
 #landing .plans>div{background:var(--ink);border:1px solid var(--line);border-radius:14px;padding:30px}
-#landing .plans>div:nth-child(2){border-color:var(--sun);box-shadow:0 10px 30px rgba(196,18,47,.18)}
+#landing .plans>div:nth-child(2){border-color:var(--sun);box-shadow:0 10px 30px rgba(124,58,237,.18)}
 #landing .plans .tag{color:var(--gain);font-size:14px;text-transform:uppercase;letter-spacing:.08em}
-#landing .plans>div:nth-child(2) .tag{color:#ee4a63}
+#landing .plans>div:nth-child(2) .tag{color:#a78bfa}
 #landing summary{list-style:none;display:flex;justify-content:space-between;gap:16px}
 #landing summary::-webkit-details-marker{display:none}
 #landing summary::after{content:"+";color:var(--sun);font-size:28px;line-height:1}
 #landing details[open] summary::after{content:"\2212"}
-#landing .closing{background:radial-gradient(ellipse 60% 120% at 50% 130%,rgba(196,18,47,.35),transparent 70%),var(--ink2);text-align:center}
+#landing .closing{background:radial-gradient(ellipse 60% 120% at 50% 130%,rgba(124,58,237,.35),transparent 70%),var(--ink2);text-align:center}
 #landing .closing h2{margin-left:auto;margin-right:auto}
 #landing footer{border-top:1px solid var(--line)}
 @media (prefers-reduced-motion:no-preference){#landing .rv{opacity:0;transform:translateY(26px);transition:opacity .7s ease,transform .7s ease}#landing .rv.in{opacity:1;transform:none}}
@@ -431,7 +432,7 @@ html{scroll-behavior:smooth}
 #dashboardApp:not([hidden]){display:block;padding-left:232px}
 #dashboardApp .side{position:fixed;left:0;top:0;bottom:0;width:232px;background:#10101a;color:#d8d7e6;display:flex;flex-direction:column;gap:6px;padding:calc(22px + env(safe-area-inset-top,0px)) 14px 22px;z-index:30;overflow-y:auto}
 #dashboardApp .sb{display:flex;align-items:center;gap:10px;color:#fff;text-decoration:none;font:800 1.35rem "Shippori Mincho B1",Georgia,serif;margin:0 6px 20px}
-#dashboardApp .sb .dot{width:16px;height:16px;border-radius:50%;background:#c4122f}
+#dashboardApp .sb .dot{width:16px;height:16px;border-radius:50%;background:#7c3aed}
 #dashboardApp .side nav{display:grid;gap:4px}
 #dashboardApp .side nav a{display:block;padding:10px 12px;border-radius:8px;color:#a9a8c2;text-decoration:none;font-size:.92rem;white-space:nowrap}
 #dashboardApp .side nav a:hover{background:#1d1d2c;color:#fff}
@@ -459,6 +460,49 @@ html{scroll-behavior:smooth}
 .rr{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.86rem}.rr:last-child{border-bottom:0}.rr span{color:var(--mute);text-align:right}
 #rep{grid-template-columns:1fr 1fr}@media (max-width:860px){#rep{grid-template-columns:1fr}}
 .rnm{font-weight:700;font-size:.86rem;margin:10px 0 4px}.rr.sub{padding-left:18px}.rr.sub b{font-weight:400;color:var(--mute)}#mbody .msec>input{display:block;width:100%;margin:0 0 8px}
+
+/* Pipdojo violet look (inspired by modern trading-journal sites) */
+#landing{--ink:#07060f;--ink2:#0e0b1c;--line:#261f42;--mute:#9b98b4;--washi:#f1effa;--sun:#7c3aed;
+ background:#07060f url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='72' height='72'%3E%3Cpath d='M34 34l4 4m0-4l-4 4' stroke='%2333295c' stroke-width='1'/%3E%3C/svg%3E");
+ font-family:Inter,"Zen Kaku Gothic New",system-ui,sans-serif}
+#landing h1,#landing h2,#landing h3,#landing summary,#landing .brand,#landing ol li::before{font-family:Inter,system-ui,sans-serif;letter-spacing:-.025em}
+#landing header{background:rgba(7,6,15,.82);border-bottom-color:rgba(38,31,66,.8)}
+#landing .dot{width:32px;height:32px;border-radius:9px;background:linear-gradient(135deg,#8b5cf6,#4c1d95);display:grid;place-items:center;box-shadow:0 0 18px rgba(124,58,237,.5)}
+#landing .dot::after{content:"P";color:#fff;font:800 16px Inter,sans-serif}
+#landing .brand{font-size:22px;font-weight:800}
+#landing nav a.keep{border-radius:999px;padding:9px 22px;background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-color:transparent;box-shadow:0 6px 20px rgba(124,58,237,.4)}
+#landing nav a.keep::after{content:" \2192"}
+#landing .hero{background:radial-gradient(ellipse 60% 55% at 50% 0%,rgba(124,58,237,.30),transparent 70%),radial-gradient(ellipse 45% 50% at 78% 95%,rgba(124,58,237,.25),transparent 70%)}
+#landing .hero h1{font-weight:800}
+#landing .hero .hl,#landing .hl{background:linear-gradient(90deg,#a78bfa,#e9d5ff);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
+#landing .btn{border-radius:999px;padding:13px 28px}
+#landing .btn.primary{background:linear-gradient(135deg,#8b5cf6,#6d28d9);box-shadow:0 10px 30px rgba(124,58,237,.45)}
+#landing .btn.primary:hover{background:linear-gradient(135deg,#9d77f8,#7c3aed)}
+#landing .btn.primary::after{content:" \2192"}
+#landing .btn.ghost{background:rgba(255,255,255,.03);border-color:#3b2f66}
+#landing .kick{display:inline-block;margin-bottom:16px;padding:6px 14px;border:1px solid #3b2f66;background:rgba(124,58,237,.12);color:#c4b5fd;border-radius:999px;font-size:12px;font-weight:700;letter-spacing:.1em;text-transform:uppercase}
+#landing .split h2::before,#landing .lead h2::before{display:none}
+#landing .band{background:rgba(14,11,28,.85)}
+#landing .pane,#landing .items>div,#landing ol li,#landing .reports li,#landing .plans>div{background:linear-gradient(180deg,rgba(20,15,42,.9),rgba(12,9,26,.9));border-color:#261f42}
+#landing .reports li{border-left-color:#7c3aed}
+#landing .items>div:hover,#landing .reports li:hover{border-color:#7c3aed;box-shadow:0 10px 30px rgba(124,58,237,.18)}
+#landing .plans>div{position:relative;border-radius:18px}
+#landing .plans>div:nth-child(2){border-color:#7c3aed;background:linear-gradient(180deg,rgba(40,24,84,.85),rgba(14,10,32,.95));box-shadow:0 0 50px rgba(124,58,237,.25)}
+#landing .plans>div:nth-child(2)::before{content:"COMING SOON";position:absolute;top:-13px;left:50%;transform:translateX(-50%);background:linear-gradient(135deg,#8b5cf6,#6d28d9);color:#fff;font-size:11px;font-weight:700;letter-spacing:.1em;padding:5px 14px;border-radius:999px}
+#landing .plans .tag{color:#a78bfa}
+#landing .closing{background:radial-gradient(ellipse 60% 120% at 50% 130%,rgba(124,58,237,.4),transparent 70%),#0e0b1c}
+#landing .track{background:#1a1433}
+#landing .fill{background:linear-gradient(90deg,#5b21b6,#a78bfa)}
+/* dashboard in the same violet theme */
+:root{--acc:#7c3aed}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#07060f;--panel:#0f0c1d;--panel2:#16122b;--line:#241d3d;--ink:#f1effa;--mute:#9b98b4;--acc:#8b5cf6}}
+:root[data-theme="dark"]{--bg:#07060f;--panel:#0f0c1d;--panel2:#16122b;--line:#241d3d;--ink:#f1effa;--mute:#9b98b4;--acc:#8b5cf6}
+#dashboardApp .side{background:#0a0817;border-right:1px solid #1c1636}
+#dashboardApp .sb{font-family:Inter,system-ui,sans-serif;letter-spacing:-.02em}
+#dashboardApp .sb .dot{width:30px;height:30px;border-radius:9px;background:linear-gradient(135deg,#8b5cf6,#4c1d95);display:grid;place-items:center;box-shadow:0 0 16px rgba(124,58,237,.5)}
+#dashboardApp .sb .dot::after{content:"P";color:#fff;font:800 15px Inter,sans-serif}
+#dashboardApp .side nav a:hover,#dashboardApp .sbtn:hover{background:rgba(124,58,237,.2);color:#fff}
+#dashboardApp .btn.main{background:linear-gradient(135deg,#8b5cf6,#6d28d9);border-color:transparent;border-radius:999px}
 </style>
 </head>
 <body>
@@ -484,7 +528,7 @@ html{scroll-behavior:smooth}
 <a class="btn ghost" href="#features">See what it does</a>
 <ul class="trust"><li>Log every trade in R</li><li>Same journal on phone and laptop</li><li>Free to start</li></ul>
 </div>
-<svg aria-label="Candlestick chart rising in front of a red sun" id="art" preserveaspectratio="xMidYMax slice" role="img" viewbox="0 0 1040 260"><circle class="sun" cx="790" cy="270" r="175" fill="#c4122f"/><circle cx="790" cy="270" r="215" fill="none" stroke="#c4122f" stroke-opacity=".25"/><path d="M0 260 L0 236 Q200 214 400 238 T800 232 T1040 236 L1040 260Z" fill="#17243b"/><line x1="100" x2="100" y1="238" y2="212" stroke="#4cc29a" stroke-width="2"/><rect x="90" y="218" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/><line x1="162" x2="162" y1="230" y2="210" stroke="#ece6d8" stroke-width="2"/><rect x="152" y="218" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="224" x2="224" y1="230" y2="202" stroke="#4cc29a" stroke-width="2"/><rect x="214" y="208" width="20" height="18" fill="#4cc29a" stroke="#101a2b"/><line x1="286" x2="286" y1="214" y2="190" stroke="#4cc29a" stroke-width="2"/><rect x="276" y="196" width="20" height="12" fill="#4cc29a" stroke="#101a2b"/><line x1="348" x2="348" y1="208" y2="186" stroke="#ece6d8" stroke-width="2"/><rect x="338" y="196" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="410" x2="410" y1="208" y2="176" stroke="#4cc29a" stroke-width="2"/><rect x="400" y="182" width="20" height="22" fill="#4cc29a" stroke="#101a2b"/><line x1="472" x2="472" y1="188" y2="160" stroke="#4cc29a" stroke-width="2"/><rect x="462" y="168" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/><line x1="534" x2="534" y1="180" y2="156" stroke="#ece6d8" stroke-width="2"/><rect x="524" y="168" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="596" x2="596" y1="180" y2="144" stroke="#4cc29a" stroke-width="2"/><rect x="586" y="150" width="20" height="26" fill="#4cc29a" stroke="#101a2b"/><line x1="658" x2="658" y1="156" y2="128" stroke="#4cc29a" stroke-width="2"/><rect x="648" y="138" width="20" height="12" fill="#4cc29a" stroke="#101a2b"/><line x1="720" x2="720" y1="150" y2="120" stroke="#ece6d8" stroke-width="2"/><rect x="710" y="138" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="782" x2="782" y1="150" y2="104" stroke="#4cc29a" stroke-width="2"/><rect x="772" y="112" width="20" height="34" fill="#4cc29a" stroke="#101a2b"/><line x1="844" x2="844" y1="118" y2="88" stroke="#4cc29a" stroke-width="2"/><rect x="834" y="98" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/></svg>
+<svg aria-label="Candlestick chart rising in front of a red sun" id="art" preserveaspectratio="xMidYMax slice" role="img" viewbox="0 0 1040 260"><circle class="sun" cx="790" cy="270" r="175" fill="#7c3aed"/><circle cx="790" cy="270" r="215" fill="none" stroke="#7c3aed" stroke-opacity=".25"/><path d="M0 260 L0 236 Q200 214 400 238 T800 232 T1040 236 L1040 260Z" fill="#17243b"/><line x1="100" x2="100" y1="238" y2="212" stroke="#4cc29a" stroke-width="2"/><rect x="90" y="218" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/><line x1="162" x2="162" y1="230" y2="210" stroke="#ece6d8" stroke-width="2"/><rect x="152" y="218" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="224" x2="224" y1="230" y2="202" stroke="#4cc29a" stroke-width="2"/><rect x="214" y="208" width="20" height="18" fill="#4cc29a" stroke="#101a2b"/><line x1="286" x2="286" y1="214" y2="190" stroke="#4cc29a" stroke-width="2"/><rect x="276" y="196" width="20" height="12" fill="#4cc29a" stroke="#101a2b"/><line x1="348" x2="348" y1="208" y2="186" stroke="#ece6d8" stroke-width="2"/><rect x="338" y="196" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="410" x2="410" y1="208" y2="176" stroke="#4cc29a" stroke-width="2"/><rect x="400" y="182" width="20" height="22" fill="#4cc29a" stroke="#101a2b"/><line x1="472" x2="472" y1="188" y2="160" stroke="#4cc29a" stroke-width="2"/><rect x="462" y="168" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/><line x1="534" x2="534" y1="180" y2="156" stroke="#ece6d8" stroke-width="2"/><rect x="524" y="168" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="596" x2="596" y1="180" y2="144" stroke="#4cc29a" stroke-width="2"/><rect x="586" y="150" width="20" height="26" fill="#4cc29a" stroke="#101a2b"/><line x1="658" x2="658" y1="156" y2="128" stroke="#4cc29a" stroke-width="2"/><rect x="648" y="138" width="20" height="12" fill="#4cc29a" stroke="#101a2b"/><line x1="720" x2="720" y1="150" y2="120" stroke="#ece6d8" stroke-width="2"/><rect x="710" y="138" width="20" height="8" fill="#ece6d8" stroke="#101a2b"/><line x1="782" x2="782" y1="150" y2="104" stroke="#4cc29a" stroke-width="2"/><rect x="772" y="112" width="20" height="34" fill="#4cc29a" stroke="#101a2b"/><line x1="844" x2="844" y1="118" y2="88" stroke="#4cc29a" stroke-width="2"/><rect x="834" y="98" width="20" height="14" fill="#4cc29a" stroke="#101a2b"/></svg>
 </div>
 <section class="lead">
 <div class="wrap">
@@ -501,9 +545,9 @@ html{scroll-behavior:smooth}
 <h3>Cumulative net R</h3>
 <svg aria-label="Sample line chart of cumulative R rising over time" role="img" viewbox="0 0 400 170">
 <line stroke="#2f4064" stroke-dasharray="4 4" x1="0" x2="400" y1="150" y2="150"></line>
-<path d="M10 150 L45 128 L80 136 L115 100 L150 108 L185 78 L220 88 L255 56 L290 64 L325 36 L360 44 L390 20 L390 165 L10 165 Z" fill="#c4122f" opacity=".16"></path>
+<path d="M10 150 L45 128 L80 136 L115 100 L150 108 L185 78 L220 88 L255 56 L290 64 L325 36 L360 44 L390 20 L390 165 L10 165 Z" fill="#7c3aed" opacity=".16"></path>
 <path d="M10 150 L45 128 L80 136 L115 100 L150 108 L185 78 L220 88 L255 56 L290 64 L325 36 L360 44 L390 20" fill="none" stroke="#ece6d8" stroke-linejoin="round" stroke-width="2.5"></path>
-<circle cx="390" cy="20" fill="#c4122f" r="6"></circle>
+<circle cx="390" cy="20" fill="#7c3aed" r="6"></circle>
 </svg>
 </div>
 <div class="pane">
@@ -520,7 +564,7 @@ html{scroll-behavior:smooth}
 </section>
 <section id="features">
 <div class="wrap split">
-<h2>What you can log and review</h2>
+<div><span class="kick">Features</span><h2>What you can log and review</h2></div>
 <div class="items">
 <div><h3>Every trade in R</h3><p>Record the outcome and the R you reached, so trades of different sizes can be compared fairly.</p></div>
 <div><h3>Built around your own rules</h3><p>Write the rules of your own system and give each one its own options, like HTF POI with H4, D1 or W1. Pick what you used on each trade and see what works.</p></div>
@@ -531,6 +575,7 @@ html{scroll-behavior:smooth}
 </section>
 <section class="band" id="reports">
 <div class="wrap">
+<span class="kick">Reports</span>
 <h2 style="font-size:clamp(28px,4vw,40px);max-width:22ch;margin-bottom:40px">Reports that show where you win and where you lose</h2>
 <ul class="reports">
 <li><b>Monthly win rate</b><span>Find your best and worst months without guessing.</span></li>
@@ -542,7 +587,7 @@ html{scroll-behavior:smooth}
 </section>
 <section id="how">
 <div class="wrap split">
-<h2>How it works</h2>
+<div><span class="kick">How it works</span><h2>Three simple steps</h2></div>
 <ol>
 <li><div><h3>Create your account</h3><p>Sign up with your email and a password.</p></div></li>
 <li><div><h3>Log trades after each session</h3><p>Add each trade while you still remember why you took it.</p></div></li>
@@ -552,7 +597,7 @@ html{scroll-behavior:smooth}
 </section>
 <section class="band">
 <div class="wrap split">
-<h2>Pricing</h2>
+<div><span class="kick">Pricing</span><h2>Start free</h2></div>
 <div class="plans">
 <div><h3>Free</h3><span class="tag">Start here</span><p>Log your trades and see your main reports.</p></div>
 <div><h3>Pro</h3><span class="tag">Coming soon</span><p>More history and deeper reports for traders who journal every day.</p></div>
