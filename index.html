@@ -456,7 +456,8 @@ html{scroll-behavior:smooth}
   #dashboardApp .sbot{margin:0 0 0 auto;display:flex}
 }
 [hidden]{display:none!important}
-#rep{grid-template-columns:1fr}
+.rr{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.86rem}.rr:last-child{border-bottom:0}.rr span{color:var(--mute);text-align:right}
+#rep{grid-template-columns:1fr 1fr}@media (max-width:860px){#rep{grid-template-columns:1fr}}
 </style>
 </head>
 <body>
@@ -521,10 +522,8 @@ html{scroll-behavior:smooth}
 <h2>What you can log and review</h2>
 <div class="items">
 <div><h3>Every trade in R</h3><p>Record the outcome and the R you reached, so trades of different sizes can be compared fairly.</p></div>
-<div><h3>Built around your own system</h3><p>Rename the groups (session, pair, setup, level, time frame), add your own options and switch off what you do not use.</p></div>
-<div><h3>Your emotions and your mistakes</h3><p>Note how you felt, and whether you followed your plan, moved your stop loss or entered early.</p></div>
+<div><h3>Built around your own rules</h3><p>Write the rules of your own trading system. Tick the ones you followed on each trade, and see how your results change.</p></div>
 <div><h3>A review after each trade</h3><p>Write what you did well and the lesson for next time, while the trade is still fresh.</p></div>
-<div><h3>Your own lists</h3><p>Rename or add setups, sessions and other options, so the journal matches your strategy.</p></div>
 <div><h3>The same journal on every device</h3><p>Log in on your phone or your laptop and see the same trades. Download a backup file whenever you want.</p></div>
 </div>
 </div>
@@ -535,11 +534,7 @@ html{scroll-behavior:smooth}
 <ul class="reports">
 <li><b>Monthly win rate</b><span>Find your best and worst months without guessing.</span></li>
 <li><b>Cumulative net R</b><span>Your progress as one line you can read in a second.</span></li>
-<li><b>Session performance</b><span>See how you do in the Asian, London and New York hours.</span></li>
-<li><b>Setup performance</b><span>Find the setups that earn R and the ones that cost it.</span></li>
-<li><b>Level and time frame</b><span>Compare your results by level and by time frame.</span></li>
-<li><b>Emotion performance</b><span>See how calm trades and fearful or FOMO trades turn out.</span></li>
-<li><b>Execution and mistakes</b><span>Count how often you followed the plan and what broke it.</span></li>
+<li><b>Rules performance</b><span>See how your results change when you follow your own rules, and when you break them.</span></li>
 <li><b>A score for your trading</b><span>One chart that sums up how you are trading right now.</span></li>
 </ul>
 </div>
@@ -604,7 +599,7 @@ html{scroll-behavior:smooth}
 <div id="dashboardApp" hidden>
 <aside class="side"><a class="sb" href="#dashTop"><span class="dot"></span>Pipdojo</a>
 <nav><a href="#dashTop">Dashboard</a><a href="#calsec">Calendar</a><a href="#rep">Reports</a><a href="#log">Trade log</a></nav>
-<div class="sbot"><button class="sbtn" id="mng" type="button">Customize lists</button><button class="sbtn" id="theme" type="button">Light / dark</button><button class="sbtn" id="lo" type="button">Log out</button></div></aside>
+<div class="sbot"><button class="sbtn" id="mng" type="button">My rules</button><button class="sbtn" id="theme" type="button">Light / dark</button><button class="sbtn" id="lo" type="button">Log out</button></div></aside>
 <main id="dashTop">
 <header><div><h1>Dashboard</h1><span class="sub">Your trading at a glance</span></div>
 <div class="hr"><div class="tabs" id="tabs"></div><span id="syn" style="font-size:.78rem;color:var(--mute)"></span><button class="btn main" id="add" type="button">+ Add trade</button></div></header>
@@ -622,10 +617,11 @@ html{scroll-behavior:smooth}
 <section class="card"><h2 style="margin-bottom:6px">Recent trades</h2><div id="recent"></div></section>
 </div>
 <div class="grid3" id="rep">
+<section class="card"><h2>Rules performance</h2><div id="rules"></div></section>
 <section class="card"><h2>Monthly win rate</h2><div id="g7"></div></section>
 </div>
 <section class="card" style="margin-bottom:12px"><div class="ct"><h2>Setup across sessions</h2><select aria-label="Setup" class="inl" id="sel"></select></div><div class="sess" id="sess"></div></section>
-<section class="card" id="log"><h2 style="margin-bottom:8px">Trade history <span id="t5"></span></h2><div class="tw"><table><thead><tr><th>Date</th><th>Session</th><th>Setup</th><th>Level</th><th>TF</th><th>Result</th><th>R</th><th>Review</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></section>
+<section class="card" id="log"><h2 style="margin-bottom:8px">Trade history <span id="t5"></span></h2><div class="tw"><table><thead><tr><th>Date</th><th>Rules followed</th><th>Result</th><th>R</th><th>Review</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></section>
 <div class="acts" style="margin-top:12px"><button class="btn" id="exp" type="button">Download backup</button><button class="btn" id="imp" type="button">Restore backup</button><input accept=".json,application/json" hidden="" id="file" type="file"/></div>
 <p class="foot">Trades are saved to your account and sync across your devices. Click a day on the calendar to add a trade for that date. Download a backup now and then.</p>
 </main>
@@ -639,16 +635,17 @@ html{scroll-behavior:smooth}
 <label id="rl">R reached<input id="r" min="0.1" step="0.1" type="number" value="2"/></label>
 <fieldset><legend>Levels</legend><div class="cb" id="lv"></div></fieldset>
 <fieldset><legend>Time frame</legend><div class="cb" id="tf"></div></fieldset>
+<fieldset><legend>Rules I followed</legend><div class="cb" id="ru"></div><p id="rnone" style="color:var(--mute);font-size:.82rem;margin:0 0 8px">You have no rules yet. Write your first rule below.</p><div class="mrow"><input id="nr" maxlength="70" placeholder="Add a rule, e.g. Waited for confirmation" type="text"/><button class="btn small" id="nra" type="button">Add</button></div></fieldset>
 <div class="acts"><button class="btn main" type="submit">Save trade</button><button class="btn" id="acancel" type="button">Cancel</button></div>
 </form></dialog>
-<dialog id="mdlg"><h2>Customize lists</h2>
-<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Make Pipdojo fit your own system. Rename a group (for example Session → Pair), untick it if you do not use it, and add your own options. Removing an option only hides it from the dropdowns; trades you already logged keep it.</p>
+<dialog id="mdlg"><h2>My rules</h2>
+<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Write your own trading rules. When you add a trade, you tick the rules you followed. Pipdojo then shows how your results change when you follow them. Removing a rule only hides it from new trades; trades you already logged keep it.</p>
 <div id="mbody"></div><div class="acts"><button class="btn main" id="mdone" type="button">Done</button></div></dialog>
 <dialog id="dlg"><form id="rf">
 <h2>Trade review</h2><div id="rt" style="color:var(--mute);font-size:.82rem;margin-top:-6px"></div>
 <fieldset><legend>Execution rating</legend><div aria-label="Execution rating" class="stars" id="stars" role="group"></div></fieldset>
-<fieldset><legend>How did you feel</legend><div class="cb" id="re"></div></fieldset>
-<fieldset><legend>Execution</legend><div class="cb" id="rm"></div></fieldset>
+<fieldset hidden><legend>How did you feel</legend><div class="cb" id="re"></div></fieldset>
+<fieldset hidden><legend>Execution</legend><div class="cb" id="rm"></div></fieldset>
 <label>What I did well<textarea id="rg" maxlength="300" rows="2"></textarea></label>
 <label>Lesson for next time<textarea id="rn" maxlength="300" rows="2"></textarea></label>
 <div class="acts"><button class="btn main" type="submit">Save review</button><button class="btn" id="rcancel" type="button">Cancel</button></div>
@@ -656,12 +653,13 @@ html{scroll-behavior:smooth}
 </div>
 <script>
 // Edit these lists to change the dropdowns.
-var SESSIONS=["Asian","London","New York"];
+var SESSIONS=[];
 var SETUPS=[];
 var LEVELS=[];
-var TFS=["5m","15m","1H","4H","1D"];
-var EMOTIONS=["Calm","Confident","Hesitant","FOMO","Fear","Greed","Revenge","Bored"];
-var MISTAKES=["Followed plan","Early entry","Late entry","Moved SL","Closed early","Over-risked","Broke rules"];
+var TFS=[];
+var EMOTIONS=[];
+var MISTAKES=[];
+var RULES=[];
 var SEED=[
  {d:"2026-10-05",s:"PB",ss:"Asian",tf:["D"],lv:["Momentum Trap"],o:"Loss",r:-1},
  {d:"2026-10-05",s:"PB",ss:"Asian",tf:["H4"],lv:["Momentum Trap"],o:"Loss",r:-1},
@@ -669,7 +667,7 @@ var SEED=[
  {d:"2026-10-08",s:"PB",ss:"Frankfurt",tf:["15m"],lv:["Momentum Trap"],o:"Loss",r:-1}
 ];
 window.startApp=function(){
-var CFG={lab:{},off:{}},KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
+var CFG={lab:{},off:{SESSIONS:true,SETUPS:true,LEVELS:true,TFS:true}},KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
 var p2=function(n){return (n<10?'0':'')+n},ld=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
 var now=new Date(),today=ld(now),cal=new Date(now.getFullYear(),now.getMonth(),1);
 function seed(){return []}
@@ -768,12 +766,14 @@ $('o').onchange=function(){var w=$('o').value==='Win';$('r').disabled=!w;$('rl')
 $('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=o==='Win'?parseFloat($('r').value):(o==='Loss'?-1:0);if(isNaN(r))return;
   var sn=CFG.off.SETUPS?'':$('s').value;
   if(sn==='__new'){sn=$('ns').value.trim();if(!sn)return;var ex=SETUPS.filter(function(a){return a.toLowerCase()===sn.toLowerCase()})[0];if(ex)sn=ex;else{SETUPS.push(sn);saveLists()}$('ns').value=''}
-  T.push({id:Date.now(),d:$('d').value,ss:CFG.off.SESSIONS?'':$('ss').value,s:sn,tf:CFG.off.TFS?[]:picked('tf'),lv:CFG.off.LEVELS?[]:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
-$('s').onchange=function(){var nw=$('s').value==='__new';$('nsl').hidden=!nw;$('ns').required=nw;if(nw)$('ns').focus()};
+  T.push({ru:picked('ru'),rall:RULES.slice(),id:Date.now(),d:$('d').value,ss:CFG.off.SESSIONS?'':$('ss').value,s:sn,tf:CFG.off.TFS?[]:picked('tf'),lv:CFG.off.LEVELS?[]:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
+$('nra').onclick=function(){var v=$('nr').value.trim();if(!v)return;var sel=picked('ru'),ex=RULES.filter(function(a){return a.toLowerCase()===v.toLowerCase()})[0];if(ex)v=ex;else{RULES.push(v);saveLists()}if(sel.indexOf(v)<0)sel.push(v);boxes('ru',RULES,sel);$('rnone').hidden=true;$('nr').value=''};
+$('nr').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();$('nra').click()}};
+$('s').onchange=function(){var nw=$('s').value==='__new'&&!CFG.off.SETUPS;$('nsl').hidden=!nw;$('ns').required=nw;if(nw)$('ns').focus()};
 var cur=null,stars=0;
 function setStars(n){stars=n;[].forEach.call($('stars').children,function(b,i){b.setAttribute('aria-pressed',i<n);b.textContent=i<n?'★':'☆'})}
 for(var si=1;si<=5;si++){(function(n){var b=el('button','☆','star');b.type='button';b.setAttribute('aria-label',n+' of 5');b.onclick=function(){setStars(stars===n?0:n)};$('stars').appendChild(b)})(si)}
-function openReview(x){cur=x;$('rt').textContent=x.d+' · '+x.s+' · '+x.ss+' · '+f(x.r)+'R';boxes('re',EMOTIONS,x.emo);boxes('rm',MISTAKES,x.mis);setStars(x.stars||0);$('rg').value=x.good||'';$('rn').value=x.lesson||'';$('dlg').showModal()}
+function openReview(x){cur=x;$('rt').textContent=x.d+' · '+(x.rall&&x.rall.length?rcount(x)+' rules · ':'')+f(x.r)+'R';boxes('re',EMOTIONS,x.emo);boxes('rm',MISTAKES,x.mis);setStars(x.stars||0);$('rg').value=x.good||'';$('rn').value=x.lesson||'';$('dlg').showModal()}
 $('rf').onsubmit=function(e){e.preventDefault();if(!cur)return;cur.emo=picked('re');cur.mis=picked('rm');cur.stars=stars;cur.good=$('rg').value.trim();cur.lesson=$('rn').value.trim();save();$('dlg').close();render()};
 $('rcancel').onclick=function(){$('dlg').close()};
 
@@ -785,22 +785,31 @@ $('file').onchange=function(){var fl=this.files[0];if(!fl)return;var r=new FileR
   if(confirm('Replace your current '+T.length+' trades with '+a.length+' trades from this file?')){T=a;save();render()}}catch(e){alert('That file is not a valid journal backup.')}};r.readAsText(fl);this.value=''};
 
 // ---- custom lists
-var LN=[['SETUPS','Setups'],['SESSIONS','Sessions'],['LEVELS','Levels'],['TFS','Time frames'],['EMOTIONS','Emotions'],['MISTAKES','Execution tags']];
-function lists(){return{SETUPS:SETUPS,SESSIONS:SESSIONS,LEVELS:LEVELS,TFS:TFS,EMOTIONS:EMOTIONS,MISTAKES:MISTAKES}}
+var LN=[['RULES','My rules']];
+function lists(){return{SETUPS:SETUPS,SESSIONS:SESSIONS,LEVELS:LEVELS,TFS:TFS,EMOTIONS:EMOTIONS,MISTAKES:MISTAKES,RULES:RULES}}
 function saveLists(){try{var o=lists();o._cfg=CFG;localStorage.setItem('sniper-fx-lists-v2',JSON.stringify(o))}catch(e){}}
-function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;if(sl._cfg){CFG.lab=sl._cfg.lab||{};CFG.off=sl._cfg.off||{}}var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
+function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;if(sl._cfg){CFG.lab=sl._cfg.lab||{};CFG.off={SESSIONS:true,SETUPS:true,LEVELS:true,TFS:true}}var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
 var DEF={SESSIONS:'Session',SETUPS:'Setup',LEVELS:'Level',TFS:'Time frame'},GI={SESSIONS:'g1',SETUPS:'g2',LEVELS:'g3',TFS:'g4'};
 function nm(k){return CFG.lab[k]||DEF[k]}
 function applyCfg(){
   var lb=function(id,k){var n=$(id).parentNode;n.hidden=!!CFG.off[k];if(n.tagName==='LABEL')n.firstChild.nodeValue=nm(k);else n.querySelector('legend').textContent=nm(k)};
   lb('ss','SESSIONS');lb('s','SETUPS');lb('lv','LEVELS');lb('tf','TFS');
   $('ss').required=!CFG.off.SESSIONS;$('s').required=!CFG.off.SETUPS;
-  var th=document.querySelectorAll('#log thead th');th[1].textContent=nm('SESSIONS');th[2].textContent=nm('SETUPS');th[3].textContent=nm('LEVELS');th[4].textContent=nm('TFS');
+  
   var sc=$('sel').closest('section');sc.hidden=!!(CFG.off.SETUPS||CFG.off.SESSIONS);sc.querySelector('h2').textContent=nm('SETUPS')+' × '+nm('SESSIONS');
   $('nsl').firstChild.nodeValue='New '+nm('SETUPS').toLowerCase()+' name';
 }
+function rcount(x){return x.rall&&x.rall.length?(x.ru||[]).length+' / '+x.rall.length:'–'}
+function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
+function ln(a){var S=st(a);return S.wr.toFixed(0)+'% · '+a.length+' · '+f(S.r)+'R'}
+function rulesRep(D){var A=D.filter(function(x){return x.rall&&x.rall.length}),b=$('rules');
+  if(!A.length){b.innerHTML='<p style="color:var(--mute);margin:0">Write your rules (left menu: My rules), then tick the ones you followed on each trade. This report shows how your results change when you follow them.</p>';return}
+  var full=A.filter(function(x){return (x.ru||[]).length===x.rall.length}),brk=A.filter(function(x){return (x.ru||[]).length<x.rall.length}),names=[],o='<div class="rr"><b>All rules followed</b><span>'+(full.length?ln(full):'–')+'</span></div><div class="rr"><b>Broke a rule</b><span>'+(brk.length?ln(brk):'–')+'</span></div>';
+  A.forEach(function(x){x.rall.forEach(function(n){if(names.indexOf(n)<0)names.push(n)})});
+  names.forEach(function(n){var fo=A.filter(function(x){return x.rall.indexOf(n)>-1&&(x.ru||[]).indexOf(n)>-1}),br=A.filter(function(x){return x.rall.indexOf(n)>-1&&(x.ru||[]).indexOf(n)<0});o+='<div class="rr"><b>'+esc(n)+'</b><span>followed '+(fo.length?ln(fo):'–')+' · broke '+(br.length?ln(br):'–')+'</span></div>'});
+  b.innerHTML=o}
 function union(list,key){var o=list.slice();T.forEach(function(x){if(x[key]&&o.indexOf(x[key])<0)o.push(x[key])});return o}
-function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New '+nm('SETUPS').toLowerCase()+'…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS);applyCfg();if(!SETUPS.length&&$('s').onchange)$('s').onchange()}
+function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New '+nm('SETUPS').toLowerCase()+'…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS);boxes('ru',RULES);$('rnone').hidden=RULES.length>0;applyCfg();if(!SETUPS.length&&!CFG.off.SETUPS&&$('s').onchange)$('s').onchange()}
 function buildManage(){
   var b=$('mbody');b.textContent='';var L=lists();
   LN.forEach(function(p){
@@ -850,7 +859,7 @@ function render(){
       dk2=Object.keys(dayR).sort().slice(-30),mx=Math.max.apply(null,dk2.map(function(k){return Math.abs(dayR[k])}).concat([1])),bw=400/Math.max(dk2.length,1),bh='<line x1="0" x2="400" y1="100" y2="100" stroke="currentColor" opacity=".25"/>';
   dk2.forEach(function(k,i){var v=dayR[k],hh=Math.abs(v)/mx*90;bh+='<rect x="'+(i*bw+bw*.15)+'" y="'+(v>=0?100-hh:100)+'" width="'+bw*.7+'" height="'+Math.max(hh,1)+'" rx="2" fill="'+(v>=0?'var(--win)':'var(--loss)')+'"><title>'+k+': '+f(v)+'R</title></rect>'});
   $('dbar').innerHTML=bh;
-  $('recent').innerHTML=D.slice(-6).reverse().map(function(x){return '<div class="rt"><span>'+E(x.d)+'</span><span>'+E(x.s)+'</span><span class="chip '+(x.o==='Win'?'w':x.o==='Loss'?'l':'b')+'">'+E(x.o)+'</span><b class="'+cls(x.r)+'">'+f(x.r)+'R</b></div>'}).join('')||'<p style="color:var(--mute);margin:8px 0 0">No trades yet. First open Customize lists (left menu) and set up your own groups, then click + Add trade.</p>';
+  $('recent').innerHTML=D.slice(-6).reverse().map(function(x){return '<div class="rt"><span>'+E(x.d)+'</span><span>'+E(rcount(x))+'</span><span class="chip '+(x.o==='Win'?'w':x.o==='Loss'?'l':'b')+'">'+E(x.o)+'</span><b class="'+cls(x.r)+'">'+f(x.r)+'R</b></div>'}).join('')||'<p style="color:var(--mute);margin:8px 0 0">No trades yet. First open My rules (left menu), write your own rules, then click + Add trade.</p>';
 
   var dr=Object.keys(dayR).map(function(k){return dayR[k]}),
       sc=[S.wr,Math.min(pf===Infinity?3:pf,3)/3*100,Math.min(ratio||(aw?3:0),3)/3*100,Math.max(0,100-ab*8),Math.min(ab?Math.max(S.r,0)/ab:(S.r>0?5:0),5)*20,dr.length?dr.filter(function(v){return v>=0}).length/dr.length*100:0];
@@ -858,7 +867,7 @@ function render(){
   $('score').textContent=D.length?(sc.reduce(function(a,b){return a+b},0)/6).toFixed(1):'–';
 
   drawCal();
-  monthRows(all);
+  monthRows(all);rulesRep(D);
 
   var sel=$('sel'),cv=sel.value,su=union(SETUPS,'s');if(sel.options.length!==su.length){sel.textContent='';opts('sel',su)}if(cv)sel.value=cv;
   var ss=$('sess');ss.textContent='';var sub=D.filter(function(x){return x.s===sel.value}),m=by(sub,'ss');
@@ -867,7 +876,7 @@ function render(){
 
   var rows=$('rows');rows.textContent='';var H=D.slice().reverse();$('t5').textContent='· '+H.length+' entries';
   H.forEach(function(x){var tr=el('tr'),c=x.o==='Win'?'win':x.o==='Loss'?'loss':'open';
-    [x.d,x.ss||'–',x.s||'–',(x.lv||[]).join(', ')||'–',(x.tf||[]).join(', ')||'–'].forEach(function(v){tr.appendChild(el('td',v))});
+    [x.d,rcount(x)].forEach(function(v){tr.appendChild(el('td',v))});
     var oc=el('td');oc.appendChild(el('span',x.o,'badge '+c));tr.appendChild(oc);tr.appendChild(el('td',f(x.r)+'R',c));
     var rc=el('td'),has=x.stars||x.good||x.lesson||(x.emo&&x.emo.length)||(x.mis&&x.mis.length),rb=el('button',has?((x.stars?'★'.repeat(x.stars)+'☆'.repeat(5-x.stars)+' ':'')+'Edit'):'Add review','btn small');
     if(x.lesson)rb.title=x.lesson;rb.onclick=function(){openReview(x)};rc.appendChild(rb);tr.appendChild(rc);
