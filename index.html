@@ -458,6 +458,7 @@ html{scroll-behavior:smooth}
 [hidden]{display:none!important}
 .rr{display:flex;justify-content:space-between;gap:14px;padding:9px 0;border-bottom:1px solid var(--line);font-size:.86rem}.rr:last-child{border-bottom:0}.rr span{color:var(--mute);text-align:right}
 #rep{grid-template-columns:1fr 1fr}@media (max-width:860px){#rep{grid-template-columns:1fr}}
+.rnm{font-weight:700;font-size:.86rem;margin:10px 0 4px}.rr.sub{padding-left:18px}.rr.sub b{font-weight:400;color:var(--mute)}#mbody .msec>input{display:block;width:100%;margin:0 0 8px}
 </style>
 </head>
 <body>
@@ -522,7 +523,7 @@ html{scroll-behavior:smooth}
 <h2>What you can log and review</h2>
 <div class="items">
 <div><h3>Every trade in R</h3><p>Record the outcome and the R you reached, so trades of different sizes can be compared fairly.</p></div>
-<div><h3>Built around your own rules</h3><p>Write the rules of your own trading system. Tick the ones you followed on each trade, and see how your results change.</p></div>
+<div><h3>Built around your own rules</h3><p>Write the rules of your own system and give each one its own options, like HTF POI with H4, D1 or W1. Pick what you used on each trade and see what works.</p></div>
 <div><h3>A review after each trade</h3><p>Write what you did well and the lesson for next time, while the trade is still fresh.</p></div>
 <div><h3>The same journal on every device</h3><p>Log in on your phone or your laptop and see the same trades. Download a backup file whenever you want.</p></div>
 </div>
@@ -534,7 +535,7 @@ html{scroll-behavior:smooth}
 <ul class="reports">
 <li><b>Monthly win rate</b><span>Find your best and worst months without guessing.</span></li>
 <li><b>Cumulative net R</b><span>Your progress as one line you can read in a second.</span></li>
-<li><b>Rules performance</b><span>See how your results change when you follow your own rules, and when you break them.</span></li>
+<li><b>Rules performance</b><span>See which of your own rules, and which options of each rule, work best for you.</span></li>
 <li><b>A score for your trading</b><span>One chart that sums up how you are trading right now.</span></li>
 </ul>
 </div>
@@ -635,11 +636,11 @@ html{scroll-behavior:smooth}
 <label id="rl">R reached<input id="r" min="0.1" step="0.1" type="number" value="2"/></label>
 <fieldset><legend>Levels</legend><div class="cb" id="lv"></div></fieldset>
 <fieldset><legend>Time frame</legend><div class="cb" id="tf"></div></fieldset>
-<fieldset><legend>Rules I followed</legend><div class="cb" id="ru"></div><p id="rnone" style="color:var(--mute);font-size:.82rem;margin:0 0 8px">You have no rules yet. Write your first rule below.</p><div class="mrow"><input id="nr" maxlength="70" placeholder="Add a rule, e.g. Waited for confirmation" type="text"/><button class="btn small" id="nra" type="button">Add</button></div></fieldset>
+<fieldset><legend>My rules (pick what you used)</legend><div id="ru"></div><p id="rnone" style="color:var(--mute);font-size:.82rem;margin:0 0 8px">You have no rules yet. Write your first rule below.</p><button class="btn small" id="nra" type="button">+ Add / edit my rules</button></fieldset>
 <div class="acts"><button class="btn main" type="submit">Save trade</button><button class="btn" id="acancel" type="button">Cancel</button></div>
 </form></dialog>
 <dialog id="mdlg"><h2>My rules</h2>
-<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Write your own trading rules. When you add a trade, you tick the rules you followed. Pipdojo then shows how your results change when you follow them. Removing a rule only hides it from new trades; trades you already logged keep it.</p>
+<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Write the rules of your own trading system. A rule can have options. Example: rule “HTF POI” with options H4, D1, W1. On each trade you pick the options you used. Leave the options empty for a simple tick. Deleting a rule only removes it from new trades; trades you already logged keep it.</p>
 <div id="mbody"></div><div class="acts"><button class="btn main" id="mdone" type="button">Done</button></div></dialog>
 <dialog id="dlg"><form id="rf">
 <h2>Trade review</h2><div id="rt" style="color:var(--mute);font-size:.82rem;margin-top:-6px"></div>
@@ -766,9 +767,8 @@ $('o').onchange=function(){var w=$('o').value==='Win';$('r').disabled=!w;$('rl')
 $('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=o==='Win'?parseFloat($('r').value):(o==='Loss'?-1:0);if(isNaN(r))return;
   var sn=CFG.off.SETUPS?'':$('s').value;
   if(sn==='__new'){sn=$('ns').value.trim();if(!sn)return;var ex=SETUPS.filter(function(a){return a.toLowerCase()===sn.toLowerCase()})[0];if(ex)sn=ex;else{SETUPS.push(sn);saveLists()}$('ns').value=''}
-  T.push({ru:picked('ru'),rall:RULES.slice(),id:Date.now(),d:$('d').value,ss:CFG.off.SESSIONS?'':$('ss').value,s:sn,tf:CFG.off.TFS?[]:picked('tf'),lv:CFG.off.LEVELS?[]:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
-$('nra').onclick=function(){var v=$('nr').value.trim();if(!v)return;var sel=picked('ru'),ex=RULES.filter(function(a){return a.toLowerCase()===v.toLowerCase()})[0];if(ex)v=ex;else{RULES.push(v);saveLists()}if(sel.indexOf(v)<0)sel.push(v);boxes('ru',RULES,sel);$('rnone').hidden=true;$('nr').value=''};
-$('nr').onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();$('nra').click()}};
+  T.push({ru:pickRules(),rall:RULES.map(function(r){return r.n}),id:Date.now(),d:$('d').value,ss:CFG.off.SESSIONS?'':$('ss').value,s:sn,tf:CFG.off.TFS?[]:picked('tf'),lv:CFG.off.LEVELS?[]:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
+$('nra').onclick=function(){buildManage();$('mdlg').showModal()};
 $('s').onchange=function(){var nw=$('s').value==='__new'&&!CFG.off.SETUPS;$('nsl').hidden=!nw;$('ns').required=nw;if(nw)$('ns').focus()};
 var cur=null,stars=0;
 function setStars(n){stars=n;[].forEach.call($('stars').children,function(b,i){b.setAttribute('aria-pressed',i<n);b.textContent=i<n?'★':'☆'})}
@@ -781,14 +781,14 @@ $('rcancel').onclick=function(){$('dlg').close()};
 $('exp').onclick=function(){var b=new Blob([JSON.stringify(T,null,1)],{type:'application/json'}),a=document.createElement('a');a.href=URL.createObjectURL(b);a.download='sniper-fx-journal-'+today+'.json';a.click();setTimeout(function(){URL.revokeObjectURL(a.href)},1000)};
 $('imp').onclick=function(){$('file').click()};
 $('file').onchange=function(){var fl=this.files[0];if(!fl)return;var r=new FileReader();r.onload=function(){try{var a=JSON.parse(r.result);if(!Array.isArray(a))throw 0;
-  a=a.filter(function(x){return x&&typeof x.d==='string'&&typeof x.r==='number'&&typeof x.o==='string'}).map(function(x,i){var A=function(v){return Array.isArray(v)?v.map(String):[]};return{id:x.id||Date.now()+i,d:x.d,ss:String(x.ss||''),s:String(x.s||''),tf:A(x.tf),lv:A(x.lv),o:x.o,r:x.r,n:String(x.n||''),emo:A(x.emo),mis:A(x.mis),stars:+x.stars||0,good:String(x.good||''),lesson:String(x.lesson||'')}});
+  a=a.filter(function(x){return x&&typeof x.d==='string'&&typeof x.r==='number'&&typeof x.o==='string'}).map(function(x,i){var A=function(v){return Array.isArray(v)?v.map(String):[]},RO=function(v){var o={};if(Array.isArray(v))v.forEach(function(n){o[String(n)]=['✓']});else if(v&&typeof v==='object')for(var k in v)if(Array.isArray(v[k]))o[k]=v[k].map(String);return o};return{id:x.id||Date.now()+i,d:x.d,ss:String(x.ss||''),s:String(x.s||''),tf:A(x.tf),lv:A(x.lv),o:x.o,r:x.r,n:String(x.n||''),ru:RO(x.ru),rall:A(x.rall),emo:A(x.emo),mis:A(x.mis),stars:+x.stars||0,good:String(x.good||''),lesson:String(x.lesson||'')}});
   if(confirm('Replace your current '+T.length+' trades with '+a.length+' trades from this file?')){T=a;save();render()}}catch(e){alert('That file is not a valid journal backup.')}};r.readAsText(fl);this.value=''};
 
 // ---- custom lists
 var LN=[['RULES','My rules']];
-function lists(){return{SETUPS:SETUPS,SESSIONS:SESSIONS,LEVELS:LEVELS,TFS:TFS,EMOTIONS:EMOTIONS,MISTAKES:MISTAKES,RULES:RULES}}
-function saveLists(){try{var o=lists();o._cfg=CFG;localStorage.setItem('sniper-fx-lists-v2',JSON.stringify(o))}catch(e){}}
-function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;if(sl._cfg){CFG.lab=sl._cfg.lab||{};CFG.off={SESSIONS:true,SETUPS:true,LEVELS:true,TFS:true}}var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
+function lists(){return{SETUPS:SETUPS,SESSIONS:SESSIONS,LEVELS:LEVELS,TFS:TFS,EMOTIONS:EMOTIONS,MISTAKES:MISTAKES}}
+function saveLists(){try{var o=lists();o._cfg=CFG;o.RULES=RULES;localStorage.setItem('sniper-fx-lists-v2',JSON.stringify(o))}catch(e){}}
+function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;if(sl._cfg){CFG.lab=sl._cfg.lab||{};CFG.off={SESSIONS:true,SETUPS:true,LEVELS:true,TFS:true}}if(Array.isArray(sl.RULES)){RULES.length=0;sl.RULES.forEach(function(r){RULES.push(typeof r==='string'?{n:r,o:[]}:{n:String(r.n),o:Array.isArray(r.o)?r.o.map(String):[]})})}var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
 var DEF={SESSIONS:'Session',SETUPS:'Setup',LEVELS:'Level',TFS:'Time frame'},GI={SESSIONS:'g1',SETUPS:'g2',LEVELS:'g3',TFS:'g4'};
 function nm(k){return CFG.lab[k]||DEF[k]}
 function applyCfg(){
@@ -799,37 +799,48 @@ function applyCfg(){
   var sc=$('sel').closest('section');sc.hidden=!!(CFG.off.SETUPS||CFG.off.SESSIONS);sc.querySelector('h2').textContent=nm('SETUPS')+' × '+nm('SESSIONS');
   $('nsl').firstChild.nodeValue='New '+nm('SETUPS').toLowerCase()+' name';
 }
-function rcount(x){return x.rall&&x.rall.length?(x.ru||[]).length+' / '+x.rall.length:'–'}
+function ruo(x){var o={};if(Array.isArray(x.ru))x.ru.forEach(function(n){o[n]=['✓']});else if(x.ru)o=x.ru;return o}
+function used(x,n){var a=ruo(x)[n];return !!(a&&a.length)}
+function rcount(x){return x.rall&&x.rall.length?x.rall.filter(function(n){return used(x,n)}).length+' / '+x.rall.length:'–'}
+function drawRules(sel){var c=$('ru');c.textContent='';sel=sel||{};
+  RULES.forEach(function(r,i){var bx=el('div',undefined,'rb'),cb=el('div',undefined,'cb');bx.appendChild(el('div',(i+1)+'. '+r.n,'rnm'));
+    (r.o.length?r.o:['Yes']).forEach(function(v){var l=el('label'),inp=document.createElement('input');inp.type='checkbox';inp.value=r.o.length?v:'✓';inp.setAttribute('data-r',r.n);inp.checked=!!(sel[r.n]&&sel[r.n].indexOf(inp.value)>-1);l.appendChild(inp);l.appendChild(document.createTextNode(v));cb.appendChild(l)});
+    bx.appendChild(cb);c.appendChild(bx)});
+  $('rnone').hidden=RULES.length>0}
+function pickRules(){var o={};[].forEach.call($('ru').querySelectorAll('input:checked'),function(i){var n=i.getAttribute('data-r');(o[n]=o[n]||[]).push(i.value)});return o}
 function esc(s){return String(s).replace(/[&<>"]/g,function(c){return {'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]})}
 function ln(a){var S=st(a);return S.wr.toFixed(0)+'% · '+a.length+' · '+f(S.r)+'R'}
 function rulesRep(D){var A=D.filter(function(x){return x.rall&&x.rall.length}),b=$('rules');
-  if(!A.length){b.innerHTML='<p style="color:var(--mute);margin:0">Write your rules (left menu: My rules), then tick the ones you followed on each trade. This report shows how your results change when you follow them.</p>';return}
-  var full=A.filter(function(x){return (x.ru||[]).length===x.rall.length}),brk=A.filter(function(x){return (x.ru||[]).length<x.rall.length}),names=[],o='<div class="rr"><b>All rules followed</b><span>'+(full.length?ln(full):'–')+'</span></div><div class="rr"><b>Broke a rule</b><span>'+(brk.length?ln(brk):'–')+'</span></div>';
+  if(!A.length){b.innerHTML='<p style="color:var(--mute);margin:0">Write your rules (left menu: My rules), then pick what you used on each trade. This report shows which rules and options work best for you.</p>';return}
+  var full=A.filter(function(x){return x.rall.every(function(n){return used(x,n)})}),brk=A.filter(function(x){return x.rall.some(function(n){return !used(x,n)})}),names=[],o='<div class="rr"><b>All rules used</b><span>'+(full.length?ln(full):'–')+'</span></div><div class="rr"><b>Skipped a rule</b><span>'+(brk.length?ln(brk):'–')+'</span></div>';
   A.forEach(function(x){x.rall.forEach(function(n){if(names.indexOf(n)<0)names.push(n)})});
-  names.forEach(function(n){var fo=A.filter(function(x){return x.rall.indexOf(n)>-1&&(x.ru||[]).indexOf(n)>-1}),br=A.filter(function(x){return x.rall.indexOf(n)>-1&&(x.ru||[]).indexOf(n)<0});o+='<div class="rr"><b>'+esc(n)+'</b><span>followed '+(fo.length?ln(fo):'–')+' · broke '+(br.length?ln(br):'–')+'</span></div>'});
+  names.forEach(function(n){var u=A.filter(function(x){return x.rall.indexOf(n)>-1&&used(x,n)}),s=A.filter(function(x){return x.rall.indexOf(n)>-1&&!used(x,n)}),ops=[];
+    u.forEach(function(x){ruo(x)[n].forEach(function(v){if(v!=='✓'&&ops.indexOf(v)<0)ops.push(v)})});
+    o+='<div class="rr"><b>'+esc(n)+'</b><span>used '+(u.length?ln(u):'–')+' · skipped '+(s.length?ln(s):'–')+'</span></div>';
+    ops.forEach(function(v){var t=u.filter(function(x){return ruo(x)[n].indexOf(v)>-1});o+='<div class="rr sub"><b>'+esc(v)+'</b><span>'+ln(t)+'</span></div>'})});
   b.innerHTML=o}
 function union(list,key){var o=list.slice();T.forEach(function(x){if(x[key]&&o.indexOf(x[key])<0)o.push(x[key])});return o}
-function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New '+nm('SETUPS').toLowerCase()+'…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS);boxes('ru',RULES);$('rnone').hidden=RULES.length>0;applyCfg();if(!SETUPS.length&&!CFG.off.SETUPS&&$('s').onchange)$('s').onchange()}
+function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New '+nm('SETUPS').toLowerCase()+'…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS);drawRules();applyCfg();if(!SETUPS.length&&!CFG.off.SETUPS&&$('s').onchange)$('s').onchange()}
 function buildManage(){
-  var b=$('mbody');b.textContent='';var L=lists();
-  LN.forEach(function(p){
-    var arr=L[p[0]],sec=el('div',undefined,'msec'),pills=el('div',undefined,'pills'),row=el('div',undefined,'mrow'),inp=document.createElement('input');
-    if(DEF[p[0]]){var hd=el('div',undefined,'mrow'),cb=document.createElement('input'),ni=document.createElement('input'),K=p[0];
-      cb.type='checkbox';cb.checked=!CFG.off[K];cb.setAttribute('aria-label','Use this group');
-      cb.onchange=function(){CFG.off[K]=!cb.checked;saveLists();refreshLists();render()};
-      ni.type='text';ni.maxLength=24;ni.value=nm(K);ni.setAttribute('aria-label','Name of this group');
-      ni.onchange=function(){var v=ni.value.trim();CFG.lab[K]=(v&&v!==DEF[K])?v:'';saveLists();refreshLists();render()};
-      hd.appendChild(cb);hd.appendChild(ni);sec.appendChild(hd)}else sec.appendChild(el('h3',p[1]));
-    arr.forEach(function(v,i){var pl=el('span',v+' ','pill'),x=el('button','×');x.type='button';x.setAttribute('aria-label','Remove '+v);x.onclick=function(){arr.splice(i,1);saveLists();refreshLists();buildManage();render()};pl.appendChild(x);pills.appendChild(pl)});
+  var b=$('mbody');b.textContent='';
+  RULES.forEach(function(r,ri){
+    var sec=el('div',undefined,'msec'),hd=el('div',undefined,'mrow'),pills=el('div',undefined,'pills'),row=el('div',undefined,'mrow'),inp=document.createElement('input'),del=el('button','Delete rule','btn small');
+    hd.appendChild(el('h3',(ri+1)+'. '+r.n));del.type='button';
+    del.onclick=function(){if(confirm('Delete this rule? Trades you already logged keep it.')){RULES.splice(ri,1);saveLists();refreshLists();buildManage()}};hd.appendChild(del);sec.appendChild(hd);
+    if(!r.o.length)pills.appendChild(el('span','Simple tick (no options)','pill'));
+    r.o.forEach(function(v,i){var pl=el('span',v+' ','pill'),x=el('button','×');x.type='button';x.setAttribute('aria-label','Remove '+v);x.onclick=function(){r.o.splice(i,1);saveLists();refreshLists();buildManage()};pl.appendChild(x);pills.appendChild(pl)});
     sec.appendChild(pills);
-    inp.type='text';inp.maxLength=30;inp.placeholder='Add new…';inp.setAttribute('aria-label','New '+p[1]);
+    inp.type='text';inp.maxLength=30;inp.placeholder='Add option (e.g. H4)';inp.setAttribute('aria-label','New option for '+r.n);
     var ad=el('button','Add','btn small');ad.type='button';
-    var go=function(){var v=inp.value.trim();if(!v)return;if(!arr.some(function(a){return a.toLowerCase()===v.toLowerCase()})){arr.push(v);saveLists();refreshLists();render()}buildManage()};
+    var go=function(){var v=inp.value.trim();if(v&&!r.o.some(function(a){return a.toLowerCase()===v.toLowerCase()})){r.o.push(v);saveLists();refreshLists()}buildManage()};
     ad.onclick=go;inp.onkeydown=function(e){if(e.key==='Enter'){e.preventDefault();go()}};
     row.appendChild(inp);row.appendChild(ad);sec.appendChild(row);b.appendChild(sec)});
-}
+  var nw=el('div',undefined,'msec'),n1=document.createElement('input'),n2=document.createElement('input'),nb=el('button','Add rule','btn main');
+  nw.appendChild(el('h3','New rule'));n1.type='text';n1.maxLength=40;n1.placeholder='Rule name, e.g. HTF POI';n2.type='text';n2.maxLength=120;n2.placeholder='Options with commas, e.g. H4, D1, W1 (empty = simple tick)';nb.type='button';
+  nb.onclick=function(){var v=n1.value.trim();if(!v||RULES.some(function(a){return a.n.toLowerCase()===v.toLowerCase()}))return;var o=[];n2.value.split(',').forEach(function(s){s=s.trim();if(s&&o.indexOf(s)<0)o.push(s)});RULES.push({n:v,o:o});saveLists();refreshLists();buildManage()};
+  nw.appendChild(n1);nw.appendChild(n2);nw.appendChild(nb);b.appendChild(nw)}
 $('mng').onclick=function(){buildManage();$('mdlg').showModal()};
-$('mdone').onclick=function(){$('mdlg').close()};
+$('mdone').onclick=function(){$('mdlg').close();refreshLists()};
 
 // ---- tabs
 var TABS=[['today','Today'],['week','Week'],['month','Month'],['ytd','YTD'],['all','All time']];
