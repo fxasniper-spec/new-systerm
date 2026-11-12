@@ -455,6 +455,7 @@ html{scroll-behavior:smooth}
   #dashboardApp .side nav{display:flex}
   #dashboardApp .sbot{margin:0 0 0 auto;display:flex}
 }
+[hidden]{display:none!important}
 </style>
 </head>
 <body>
@@ -519,7 +520,7 @@ html{scroll-behavior:smooth}
 <h2>What you can log and review</h2>
 <div class="items">
 <div><h3>Every trade in R</h3><p>Record the outcome and the R you reached, so trades of different sizes can be compared fairly.</p></div>
-<div><h3>Session, setup, level and time frame</h3><p>Tag each trade with the session you traded, the setup you used, the level and the time frame.</p></div>
+<div><h3>Built around your own system</h3><p>Rename the groups (session, pair, setup, level, time frame), add your own options and switch off what you do not use.</p></div>
 <div><h3>Your emotions and your mistakes</h3><p>Note how you felt, and whether you followed your plan, moved your stop loss or entered early.</p></div>
 <div><h3>A review after each trade</h3><p>Write what you did well and the lesson for next time, while the trade is still fresh.</p></div>
 <div><h3>Your own lists</h3><p>Rename or add setups, sessions and other options, so the journal matches your strategy.</p></div>
@@ -646,7 +647,7 @@ html{scroll-behavior:smooth}
 <div class="acts"><button class="btn main" type="submit">Save trade</button><button class="btn" id="acancel" type="button">Cancel</button></div>
 </form></dialog>
 <dialog id="mdlg"><h2>Customize lists</h2>
-<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Add your own setups, sessions, levels and more. Removing an item only hides it from the dropdowns; trades you already logged keep it.</p>
+<p style="color:var(--mute);font-size:.8rem;margin:-4px 0 14px">Make Pipdojo fit your own system. Rename a group (for example Session → Pair), untick it if you do not use it, and add your own options. Removing an option only hides it from the dropdowns; trades you already logged keep it.</p>
 <div id="mbody"></div><div class="acts"><button class="btn main" id="mdone" type="button">Done</button></div></dialog>
 <dialog id="dlg"><form id="rf">
 <h2>Trade review</h2><div id="rt" style="color:var(--mute);font-size:.82rem;margin-top:-6px"></div>
@@ -660,10 +661,10 @@ html{scroll-behavior:smooth}
 </div>
 <script>
 // Edit these lists to change the dropdowns.
-var SESSIONS=["Asian","Frankfurt","London","London Close","NY Killzone","NY session","NY Reversal"];
-var SETUPS=["PB","Double Sweep","5m RBOS","PDC","Double PDC","Andro","London Close","Accelerated PB","Accelerated RBOS","Continuation 5m","Continuation 15m","KBOS MIT"];
-var LEVELS=["ALQ","Momentum Trap","SMT","HRLQ","WOG","FVG fill"];
-var TFS=["15m","H1","H4","D","W"];
+var SESSIONS=["Asian","London","New York"];
+var SETUPS=[];
+var LEVELS=[];
+var TFS=["5m","15m","1H","4H","1D"];
 var EMOTIONS=["Calm","Confident","Hesitant","FOMO","Fear","Greed","Revenge","Bored"];
 var MISTAKES=["Followed plan","Early entry","Late entry","Moved SL","Closed early","Over-risked","Broke rules"];
 var SEED=[
@@ -673,7 +674,7 @@ var SEED=[
  {d:"2026-10-08",s:"PB",ss:"Frankfurt",tf:["15m"],lv:["Momentum Trap"],o:"Loss",r:-1}
 ];
 window.startApp=function(){
-var KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
+var CFG={lab:{},off:{}},KEY='sniper-fx-journal-v1',$=function(i){return document.getElementById(i)},NS='http://www.w3.org/2000/svg',per='all',T=[];
 var p2=function(n){return (n<10?'0':'')+n},ld=function(d){return d.getFullYear()+'-'+p2(d.getMonth()+1)+'-'+p2(d.getDate())};
 var now=new Date(),today=ld(now),cal=new Date(now.getFullYear(),now.getMonth(),1);
 function seed(){return []}
@@ -770,9 +771,9 @@ function openAdd(ds){$('d').value=ds||today;$('adlg').showModal()}
 $('add').onclick=function(){openAdd(today)};$('acancel').onclick=function(){$('adlg').close()};
 $('o').onchange=function(){var w=$('o').value==='Win';$('r').disabled=!w;$('rl').style.opacity=w?1:.5};
 $('f').onsubmit=function(e){e.preventDefault();var o=$('o').value,r=o==='Win'?parseFloat($('r').value):(o==='Loss'?-1:0);if(isNaN(r))return;
-  var sn=$('s').value;
+  var sn=CFG.off.SETUPS?'':$('s').value;
   if(sn==='__new'){sn=$('ns').value.trim();if(!sn)return;var ex=SETUPS.filter(function(a){return a.toLowerCase()===sn.toLowerCase()})[0];if(ex)sn=ex;else{SETUPS.push(sn);saveLists()}$('ns').value=''}
-  T.push({id:Date.now(),d:$('d').value,ss:$('ss').value,s:sn,tf:picked('tf'),lv:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
+  T.push({id:Date.now(),d:$('d').value,ss:CFG.off.SESSIONS?'':$('ss').value,s:sn,tf:CFG.off.TFS?[]:picked('tf'),lv:CFG.off.LEVELS?[]:picked('lv'),o:o,r:r,n:''});save();$('adlg').close();refreshLists();render()};
 $('s').onchange=function(){var nw=$('s').value==='__new';$('nsl').hidden=!nw;$('ns').required=nw;if(nw)$('ns').focus()};
 var cur=null,stars=0;
 function setStars(n){stars=n;[].forEach.call($('stars').children,function(b,i){b.setAttribute('aria-pressed',i<n);b.textContent=i<n?'★':'☆'})}
@@ -791,15 +792,31 @@ $('file').onchange=function(){var fl=this.files[0];if(!fl)return;var r=new FileR
 // ---- custom lists
 var LN=[['SETUPS','Setups'],['SESSIONS','Sessions'],['LEVELS','Levels'],['TFS','Time frames'],['EMOTIONS','Emotions'],['MISTAKES','Execution tags']];
 function lists(){return{SETUPS:SETUPS,SESSIONS:SESSIONS,LEVELS:LEVELS,TFS:TFS,EMOTIONS:EMOTIONS,MISTAKES:MISTAKES}}
-function saveLists(){try{localStorage.setItem('sniper-fx-lists-v2',JSON.stringify(lists()))}catch(e){}}
-function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
+function saveLists(){try{var o=lists();o._cfg=CFG;localStorage.setItem('sniper-fx-lists-v2',JSON.stringify(o))}catch(e){}}
+function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-lists-v2'));if(!sl)return;if(sl._cfg){CFG.lab=sl._cfg.lab||{};CFG.off=sl._cfg.off||{}}var L=lists();for(var k in L)if(Array.isArray(sl[k])){L[k].length=0;sl[k].forEach(function(v){L[k].push(String(v))})}}catch(e){}}
+var DEF={SESSIONS:'Session',SETUPS:'Setup',LEVELS:'Level',TFS:'Time frame'},GI={SESSIONS:'g1',SETUPS:'g2',LEVELS:'g3',TFS:'g4'};
+function nm(k){return CFG.lab[k]||DEF[k]}
+function applyCfg(){
+  for(var k in GI){var s=$(GI[k]).parentNode;s.hidden=!!CFG.off[k];s.querySelector('h2').textContent=nm(k)+' performance'}
+  var lb=function(id,k){var n=$(id).parentNode;n.hidden=!!CFG.off[k];if(n.tagName==='LABEL')n.firstChild.nodeValue=nm(k);else n.querySelector('legend').textContent=nm(k)};
+  lb('ss','SESSIONS');lb('s','SETUPS');lb('lv','LEVELS');lb('tf','TFS');
+  $('ss').required=!CFG.off.SESSIONS;$('s').required=!CFG.off.SETUPS;
+  var th=document.querySelectorAll('#log thead th');th[1].textContent=nm('SESSIONS');th[2].textContent=nm('SETUPS');th[3].textContent=nm('LEVELS');th[4].textContent=nm('TFS');
+  var sc=$('sel').closest('section');sc.hidden=!!(CFG.off.SETUPS||CFG.off.SESSIONS);sc.querySelector('h2').textContent=nm('SETUPS')+' × '+nm('SESSIONS');
+  $('nsl').firstChild.nodeValue='New '+nm('SETUPS').toLowerCase()+' name';
+}
 function union(list,key){var o=list.slice();T.forEach(function(x){if(x[key]&&o.indexOf(x[key])<0)o.push(x[key])});return o}
-function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New setup…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS)}
+function refreshLists(){var sl=$('s');$('ss').textContent='';opts('ss',SESSIONS);sl.textContent='';opts('s',SETUPS);var n=el('option','+ New '+nm('SETUPS').toLowerCase()+'…');n.value='__new';sl.appendChild(n);$('nsl').hidden=true;$('ns').required=false;boxes('lv',LEVELS);boxes('tf',TFS);applyCfg();if(!SETUPS.length&&$('s').onchange)$('s').onchange()}
 function buildManage(){
   var b=$('mbody');b.textContent='';var L=lists();
   LN.forEach(function(p){
     var arr=L[p[0]],sec=el('div',undefined,'msec'),pills=el('div',undefined,'pills'),row=el('div',undefined,'mrow'),inp=document.createElement('input');
-    sec.appendChild(el('h3',p[1]));
+    if(DEF[p[0]]){var hd=el('div',undefined,'mrow'),cb=document.createElement('input'),ni=document.createElement('input'),K=p[0];
+      cb.type='checkbox';cb.checked=!CFG.off[K];cb.setAttribute('aria-label','Use this group');
+      cb.onchange=function(){CFG.off[K]=!cb.checked;saveLists();refreshLists();render()};
+      ni.type='text';ni.maxLength=24;ni.value=nm(K);ni.setAttribute('aria-label','Name of this group');
+      ni.onchange=function(){var v=ni.value.trim();CFG.lab[K]=(v&&v!==DEF[K])?v:'';saveLists();refreshLists();render()};
+      hd.appendChild(cb);hd.appendChild(ni);sec.appendChild(hd)}else sec.appendChild(el('h3',p[1]));
     arr.forEach(function(v,i){var pl=el('span',v+' ','pill'),x=el('button','×');x.type='button';x.setAttribute('aria-label','Remove '+v);x.onclick=function(){arr.splice(i,1);saveLists();refreshLists();buildManage();render()};pl.appendChild(x);pills.appendChild(pl)});
     sec.appendChild(pills);
     inp.type='text';inp.maxLength=30;inp.placeholder='Add new…';inp.setAttribute('aria-label','New '+p[1]);
@@ -839,7 +856,7 @@ function render(){
       dk2=Object.keys(dayR).sort().slice(-30),mx=Math.max.apply(null,dk2.map(function(k){return Math.abs(dayR[k])}).concat([1])),bw=400/Math.max(dk2.length,1),bh='<line x1="0" x2="400" y1="100" y2="100" stroke="currentColor" opacity=".25"/>';
   dk2.forEach(function(k,i){var v=dayR[k],hh=Math.abs(v)/mx*90;bh+='<rect x="'+(i*bw+bw*.15)+'" y="'+(v>=0?100-hh:100)+'" width="'+bw*.7+'" height="'+Math.max(hh,1)+'" rx="2" fill="'+(v>=0?'var(--win)':'var(--loss)')+'"><title>'+k+': '+f(v)+'R</title></rect>'});
   $('dbar').innerHTML=bh;
-  $('recent').innerHTML=D.slice(-6).reverse().map(function(x){return '<div class="rt"><span>'+E(x.d)+'</span><span>'+E(x.s)+'</span><span class="chip '+(x.o==='Win'?'w':x.o==='Loss'?'l':'b')+'">'+E(x.o)+'</span><b class="'+cls(x.r)+'">'+f(x.r)+'R</b></div>'}).join('')||'<p style="color:var(--mute);margin:8px 0 0">No trades yet. Click + Add trade to log your first one.</p>';
+  $('recent').innerHTML=D.slice(-6).reverse().map(function(x){return '<div class="rt"><span>'+E(x.d)+'</span><span>'+E(x.s)+'</span><span class="chip '+(x.o==='Win'?'w':x.o==='Loss'?'l':'b')+'">'+E(x.o)+'</span><b class="'+cls(x.r)+'">'+f(x.r)+'R</b></div>'}).join('')||'<p style="color:var(--mute);margin:8px 0 0">No trades yet. First open Customize lists (left menu) and set up your own groups, then click + Add trade.</p>';
 
   var dr=Object.keys(dayR).map(function(k){return dayR[k]}),
       sc=[S.wr,Math.min(pf===Infinity?3:pf,3)/3*100,Math.min(ratio||(aw?3:0),3)/3*100,Math.max(0,100-ab*8),Math.min(ab?Math.max(S.r,0)/ab:(S.r>0?5:0),5)*20,dr.length?dr.filter(function(v){return v>=0}).length/dr.length*100:0];
