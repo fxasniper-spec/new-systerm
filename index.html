@@ -456,6 +456,7 @@ html{scroll-behavior:smooth}
   #dashboardApp .sbot{margin:0 0 0 auto;display:flex}
 }
 [hidden]{display:none!important}
+#rep{grid-template-columns:1fr}
 </style>
 </head>
 <body>
@@ -622,12 +623,6 @@ html{scroll-behavior:smooth}
 </div>
 <div class="grid3" id="rep">
 <section class="card"><h2>Monthly win rate</h2><div id="g7"></div></section>
-<section class="card"><h2>Session performance</h2><div id="g1"></div></section>
-<section class="card"><h2>Setup performance</h2><div id="g2"></div></section>
-<section class="card"><h2>Level performance</h2><div id="g3"></div></section>
-<section class="card"><h2>Time frame performance</h2><div id="g4"></div></section>
-<section class="card"><h2>Emotion performance <span id="t6"></span></h2><div id="g5"></div></section>
-<section class="card"><h2>Execution &amp; mistakes</h2><div id="g6"></div></section>
 </div>
 <section class="card" style="margin-bottom:12px"><div class="ct"><h2>Setup across sessions</h2><select aria-label="Setup" class="inl" id="sel"></select></div><div class="sess" id="sess"></div></section>
 <section class="card" id="log"><h2 style="margin-bottom:8px">Trade history <span id="t5"></span></h2><div class="tw"><table><thead><tr><th>Date</th><th>Session</th><th>Setup</th><th>Level</th><th>TF</th><th>Result</th><th>R</th><th>Review</th><th></th></tr></thead><tbody id="rows"></tbody></table></div></section>
@@ -797,7 +792,6 @@ function applyLists(){try{var sl=JSON.parse(localStorage.getItem('sniper-fx-list
 var DEF={SESSIONS:'Session',SETUPS:'Setup',LEVELS:'Level',TFS:'Time frame'},GI={SESSIONS:'g1',SETUPS:'g2',LEVELS:'g3',TFS:'g4'};
 function nm(k){return CFG.lab[k]||DEF[k]}
 function applyCfg(){
-  for(var k in GI){var s=$(GI[k]).parentNode;s.hidden=!!CFG.off[k];s.querySelector('h2').textContent=nm(k)+' performance'}
   var lb=function(id,k){var n=$(id).parentNode;n.hidden=!!CFG.off[k];if(n.tagName==='LABEL')n.firstChild.nodeValue=nm(k);else n.querySelector('legend').textContent=nm(k)};
   lb('ss','SESSIONS');lb('s','SETUPS');lb('lv','LEVELS');lb('tf','TFS');
   $('ss').required=!CFG.off.SESSIONS;$('s').required=!CFG.off.SETUPS;
@@ -864,10 +858,7 @@ function render(){
   $('score').textContent=D.length?(sc.reduce(function(a,b){return a+b},0)/6).toFixed(1):'–';
 
   drawCal();
-  groupRows('g1','ss',D);groupRows('g2','s',D);groupRows('g3','lv',D);groupRows('g4','tf',D);monthRows(all);
-  var RV=D.filter(function(x){return x.emo&&x.emo.length||x.mis&&x.mis.length||x.stars}),rt=RV.filter(function(x){return x.stars});
-  $('t6').textContent=RV.length?'· '+RV.length+' reviewed'+(rt.length?' · avg execution '+(rt.reduce(function(a,x){return a+x.stars},0)/rt.length).toFixed(1)+'/5':''):'';
-  groupRows('g5','emo',RV.filter(function(x){return x.emo&&x.emo.length}));groupRows('g6','mis',RV.filter(function(x){return x.mis&&x.mis.length}));
+  monthRows(all);
 
   var sel=$('sel'),cv=sel.value,su=union(SETUPS,'s');if(sel.options.length!==su.length){sel.textContent='';opts('sel',su)}if(cv)sel.value=cv;
   var ss=$('sess');ss.textContent='';var sub=D.filter(function(x){return x.s===sel.value}),m=by(sub,'ss');
